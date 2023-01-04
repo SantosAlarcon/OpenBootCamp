@@ -1,0 +1,12 @@
+{
+  "name": "ejercicio3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "fechas.js",
+  "scripts": {
+    "start": "fechas.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Santos Alarcón Asensio",
+  "license": "ISC"
+}

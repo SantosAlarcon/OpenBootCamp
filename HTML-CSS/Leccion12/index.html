@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elementos de interés en Bootstrap</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container grid gap-4 p-4">
+        <h1 class="text-center">Elementos de interés en Bootstrap</h1>
+
+        <div class="p-3">
+        <h2>Jumbotron</h2>
+        <div class="col-md-6">
+            <div class="h-100 p-5 text-bg-dark rounded-3">
+              <h2>Esto es un Jumbotron</h2>
+              <p>Pulsa el botón de abajo para que salga una ventana modal</p>
+              <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#modal" type="button" role="button">Abrir ventana modal</button>
+            </div>
+          </div>
+
+          <div class="modal fade" tabindex="-1" id="modal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Ventana modal</h5>
+                </div>
+                <div class="modal-body">
+                  <p>¡Hola! Soy una ventana modal.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3">
+          <h2>Formulario</h2>
+        <form>
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre:</label>
+              <input type="text" class="form-control" id="nombre" placeholder="Introduce tu nombre">
+            </div>
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Teléfono:</label>
+                <input type="number" class="form-control" id="telefono" placeholder="Introduce tu teléfono">
+              </div>
+            <div class="mb-3">
+              <label for="mensaje" class="form-label">Mensaje</label>
+              <textarea class="form-control" name="mensaje" id="mensaje" cols="30" rows="5"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+          </form>
+        </div>
+
+        <div class="p-3">
+          <h2>Tarjeta</h2>
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Santos Alarcón Asensio</h5>
+              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus voluptate nemo sint recusandae ea. Corrupti, ullam inventore consequatur aut deserunt, pariatur animi tempore quasi in hic alias et molestiae? Dolore.</p>
+              <div class="card-footer">
+                <a href="mail:santosalarcon86@gmail.com">santosalarcon86@gmail.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</html>

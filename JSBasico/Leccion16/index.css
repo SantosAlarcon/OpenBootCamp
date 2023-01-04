@@ -1,0 +1,16 @@
+.seccion {
+    background-color: darkslategrey;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.parrafo {
+    background-color: white;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.papelera > img {
+    width: 128px;
+    height: 128px;
+}

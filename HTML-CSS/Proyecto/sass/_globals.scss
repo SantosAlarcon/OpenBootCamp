@@ -1,0 +1,308 @@
+@use "components";
+
+@mixin section-display {
+    width: 100%;
+    padding: 3rem;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+html {
+    min-width: 100vw;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 4rem;
+    border-bottom: solid 1px #ddd;
+}
+
+.logo img {
+    max-width: 7rem;
+}
+
+.sec-home {
+    display: flex;
+    align-items: center;
+    @include section-display();
+
+    .home-cta {
+        flex: 1;
+        .cta-text {
+            color: components.$color-main;
+        }
+
+        .home-title {
+            width: 20rem;
+            font-size: 3rem;
+        }
+
+        .home-description {
+            width: 300px;
+            padding: 1em 0;
+        }
+
+        .lead-magnet {
+            .input-col {
+                max-width: 200px;
+            }
+        }
+    }
+
+    .home-img img {
+        width: 40rem;
+    }
+}
+
+.sec-features {
+    @include section-display();
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .intro {
+        text-align: center;
+
+        h3 {
+            font-size: 2rem;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #888;
+        }
+    }
+
+    .features {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        min-width: 100%;
+
+        .text {
+            padding: 2rem 0;
+            flex: 1;
+
+            .feature {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                padding: 0.5rem 0;
+
+                .description {
+                    margin-left: 1rem;
+                    max-width: 30rem;
+
+                    .description-title {
+                        font-size: 1.15rem;
+                    }
+
+                    .description-text {
+                        font-size: 1rem;
+                    }
+                }
+            }
+        }
+
+        .image {
+            img {
+                max-width: 40rem;
+            }
+        }
+    }
+}
+
+.sec-benefits {
+    border-top: 1px solid #ddd;
+
+    .intro {
+        @extend .sec-features, .intro;
+    }
+
+    .benefit-cards {
+        min-width: 100%;
+        padding: 0 8rem 2rem 8rem;
+    }
+
+    .cta {
+        &::after {
+            content: ' >';
+        }
+    }
+}
+
+.sec-kpis {
+    background-color: components.$color-main;
+    color: white;
+    padding: 4rem;
+    width: 100%;
+
+    .kpi {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .number {
+            font-size: 4rem;
+            font-weight: 600;
+        }
+
+        .desc {
+            font-size: 0.9rem;
+            color: #fff;
+        }
+    }
+}
+
+.sec-onboarding {
+    .intro {
+        @extend .sec-features, .intro;
+    }
+
+    .steps {
+        padding: 0 7rem 5rem 7rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        .step-separator {
+            flex: 1;
+            margin: 0 1rem;
+            border-top: 2px solid #ddd;
+        }
+    }
+}
+
+.sec-footer-cta {
+    background-color: components.$color-footer;
+    padding: 5rem;
+    background-image: url('../assets/img/footer-cta.webp');
+    background-repeat: no-repeat;
+    background-position: 100%;
+
+    .footer-cta {
+        width: 40%;
+
+        .cta-title {
+            font-size: 2rem;
+        }
+    
+        .cta-description {
+            font-size: 1.1rem;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .sec-onboarding {
+        .steps {
+            flex-direction: column;
+
+            .icon-desc {
+                .title {
+                    text-align: center;
+                }
+
+                .text {
+                    text-align: center;
+                }
+            }
+        }
+    }
+
+    .sec-features {
+        .intro {
+            font-size: 1rem;
+
+            h3 {
+                font-size: 2rem;
+            }
+        }
+    }
+
+    .sec-benefits {
+        .intro {
+            text-align: center;
+
+            h3 {
+                font-size: 2rem;
+            }
+        }
+    }
+
+    .sec-kpis {
+        padding: 1.5rem 0;
+
+        .kpi {
+            padding: 1rem 0;
+
+            .number {
+                text-align: center;
+                font-size: 3rem;
+            }
+    
+            .desc {
+                text-align: center;
+            }
+        }
+    }
+
+    .sec-footer-cta {
+        background-image: none;
+
+        .footer-cta {
+            width: 100%;
+            text-align: center;
+        }
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #112;
+    }
+
+    .menu-principal {
+        li a {
+            color: white;
+        }
+    }
+
+    .get-started {
+        .btn-sec-s {
+            color: white;
+        }
+    }
+
+    .home-cta {
+        .home-title, .home-description {
+            color: white;
+        }
+
+        .input-text {
+            background-color: #112;
+            color: #fff;
+
+            &::placeholder {
+                color: #444;
+            }
+        }
+    }
+    
+    .intro, .title, .description {
+        color: white;
+    }
+
+    .step-separator {
+        color: rgba(255,255,255,0.2);
+    }
+}

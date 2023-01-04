@@ -1,0 +1,42 @@
+#container {
+    display: flex;
+    padding: 1em;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    gap: 1em;
+}
+
+#sidebar {
+    flex-basis: 25vw;
+}
+
+#sidebar * li {
+    list-style-type: none;
+    padding-left: -5px;
+}
+
+#principal {
+    flex-basis: 75vw;
+}
+
+@media (max-width: 640px) {
+    #container {
+        flex-direction: column-reverse;
+        justify-items: center;
+        align-items: center;
+    }
+
+    #sidebar, #principal {
+        width: 100%;
+    }
+
+    #sidebar ul {
+        display: flex;
+        gap: 1.5em;
+        flex-direction: row;
+        justify-content: center;
+        align-content: center;
+    }
+}

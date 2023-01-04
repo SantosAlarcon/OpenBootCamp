@@ -1,0 +1,12 @@
+{
+  "name": "leccion1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "leccion1.js",
+  "scripts": {
+    "start": "leccion1.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Santos Alarcón Asensio",
+  "license": "ISC"
+}
