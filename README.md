@@ -3,7 +3,8 @@ En este repositorio se guardarán los ejercicios de que se han hecho de los curs
 
 * **HTML-CSS3**
 * **JavaScript Básico**
-* React (En proceso)
+* **React Básico**
+* React Avanzado (en proceso)
 
 Los directorios **"node_modules"** no se incluirán dentro del repositorio para ahorrar espacio, pero se pueden instalar las dependencias que hay dentro de los archivos **package.json** de cada proyecto de JavaScript utilizando el comando **npm install** dentro del proyecto.
 
