@@ -1,0 +1,30 @@
+import React from 'react'
+import Task from './Task'
+import PropTypes from 'prop-types'
+
+const TaskList = ({ tareas, onTaskClick }) => {
+    return (
+        <div>
+            <h1>Tu lista de tareas</h1>
+            <ul>
+                {tareas.map((tarea, index) => (
+                    <Task key={index} {...tarea} onClick={() => onTaskClick(tarea.id)}
+                    />
+                ))}
+            </ul>
+        </div>
+    )
+}
+
+TaskList.propTypes = {
+    tareas: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            text: PropTypes.string.isRequired,
+            completada: PropTypes.bool.isRequired
+        }).isRequired
+    ),
+    onTaskClick: PropTypes.func.isRequired
+}
+
+export default TaskList;
