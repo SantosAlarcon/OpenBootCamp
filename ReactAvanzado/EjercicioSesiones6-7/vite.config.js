@@ -9,29 +9,31 @@ export default defineConfig({
     VitePWA({
       srcDir: '/',
       filename: "./public/sw.js",
-      registerType: 'prompt',
+      registerType: 'autoUpdate',
+      injectRegister: "script",
       devOptions: { enabled: true },
       manifest: {
-        "name": "Mi app de compras",
-        "short_name": "mi-app-de-compras",
+        "name": "Creador de notificaciones",
+        "short_name": "creador-notificaciones",
+        "description": "Este es una aplicación que envía notificaciones del cliente al servidor.",
         "start_url": "/",
         "display": "standalone",
         "background_color": "#006",
         "theme_color": "#006",
         "lang": "es",
-        "scope": "/",
+        "id": "/",
         "icons": [
           {
             "src": "./vite512.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
           },
           {
             "src": "./vite144.png",
             "sizes": "144x144",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
           }
         ]
       }

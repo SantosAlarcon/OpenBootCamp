@@ -1,5 +1,3 @@
-import axios from "axios";
-
 const vapidKeys = {
     publicKey: "BCzTdA2PYgPzsN3CFsT93KWZX9m5wL8VNgzlxUqy4faz0OVSIhvW-x_1e0wZq4OwDW2kOEKWV3AiZsy4ZYZMYS0",
     privateKey: "dvO7Bj_Chf_MxRgtRXyk_7t12ksYyDM8qOICHxzMTHQ"
@@ -17,8 +15,9 @@ if ('serviceWorker' in navigator) {
                         });
 
                         // Esto se envía al servidor.
-                        await axios.post("http://localhost:8000/subscription", {
-                            pushSubscription
+                        await fetch("http://localhost:8000/subscription", {
+                            method: 'POST',
+                            body: JSON.stringify(pushSubscription)
                         });
                     });
                 console.log("Service Worker funcionando: ", registration);
