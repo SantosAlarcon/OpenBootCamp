@@ -1,4 +1,4 @@
-import {LogError, LogSuccess} from "../../utils/logger";
+import { LogError, LogSuccess } from "../../utils/logger";
 import { userEntity } from "../entities/User.Entity";
 
 // CRUD de usuarios
@@ -7,10 +7,10 @@ import { userEntity } from "../entities/User.Entity";
  */
 export const getAllUsers = async (): Promise<any[] | undefined> => {
     try {
-       let userModel = userEntity();
+        let userModel = userEntity();
 
         // Buscar todos los usuarios
-        return await userModel.find({isDelete: false});
+        return await userModel.find({});
     } catch (error) {
         LogError(`Error ORM a la hora de obtener los usuarios. ${error}`);
     }
@@ -18,10 +18,10 @@ export const getAllUsers = async (): Promise<any[] | undefined> => {
 
 export const getUserById = async (id: string): Promise<any | undefined> => {
     try {
-       let userModel = userEntity();
+        let userModel = userEntity();
         return await userModel.findById(id)
     } catch (error) {
-        LogError(`Error a la hora de obtener el usuario. ${error}`); 
+        LogError(`Error a la hora de obtener el usuario. ${error}`);
     }
 }
 

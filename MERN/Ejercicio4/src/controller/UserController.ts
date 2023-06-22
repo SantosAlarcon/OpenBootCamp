@@ -1,8 +1,6 @@
 import { Get, Query, Route, Tags } from "tsoa";
-import { BasicResponse } from "./types";
 import { IUserController } from "./interfaces";
 import { LogSuccess, LogInfo } from "../utils/logger";
-
 import { getAllUsers } from "../domain/orm/User.orm";
 
 @Route("/api/users")
@@ -14,6 +12,8 @@ export class UserController implements IUserController {
     @Get("/")
     public async getUsers(@Query() id?: string): Promise<any> {
 
+        LogInfo(`${id}`);
+
         const response: any = "";
 
         if (id) {
@@ -23,17 +23,20 @@ export class UserController implements IUserController {
         } else {
             LogSuccess("[/api/users] Obteniendo todos los usuarios...");
             const response = await getAllUsers();
-
             return response;
         }
 
     }
 
+    /**
+    * Endpoint que devuelve la información de un usuario a partir de la ID.
+    */
+    @Get("/")
     public async getUserByID(@Query() id?: string): Promise<any> {
         LogSuccess(`[/api/users] Obteniendo datos del usuario con ID ${id}`);
 
         return {
-            message: `Obteniendo usuario con el `
+            message: `Obteniendo los datos del usuario con el ID ${id}`
         }
     }
 }

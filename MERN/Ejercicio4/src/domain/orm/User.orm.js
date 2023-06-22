@@ -20,7 +20,7 @@ const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let userModel = (0, User_Entity_1.userEntity)();
         // Buscar todos los usuarios
-        return yield userModel.find({ isDelete: false });
+        return yield userModel.find({});
     }
     catch (error) {
         (0, logger_1.LogError)(`Error ORM a la hora de obtener los usuarios. ${error}`);

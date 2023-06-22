@@ -28,6 +28,7 @@ let UserController = exports.UserController = class UserController {
      */
     getUsers(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            (0, logger_1.LogInfo)(`${id}`);
             const response = "";
             if (id) {
                 return {
@@ -41,11 +42,14 @@ let UserController = exports.UserController = class UserController {
             }
         });
     }
+    /**
+    * Endpoint que devuelve la información de un usuario a partir de la ID.
+    */
     getUserByID(id) {
         return __awaiter(this, void 0, void 0, function* () {
             (0, logger_1.LogSuccess)(`[/api/users] Obteniendo datos del usuario con ID ${id}`);
             return {
-                message: `Obteniendo usuario con el `
+                message: `Obteniendo los datos del usuario con el ID ${id}`
             };
         });
     }
@@ -55,6 +59,7 @@ __decorate([
     __param(0, (0, tsoa_1.Query)())
 ], UserController.prototype, "getUsers", null);
 __decorate([
+    (0, tsoa_1.Get)("/"),
     __param(0, (0, tsoa_1.Query)())
 ], UserController.prototype, "getUserByID", null);
 exports.UserController = UserController = __decorate([
