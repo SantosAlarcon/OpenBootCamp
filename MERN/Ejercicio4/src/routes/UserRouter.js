@@ -46,9 +46,9 @@ userRouter
     .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Instancia de controlador
     const controller = new UserController_1.UserController();
+    console.log(`Cuerpo: ${req.body}`);
     // Se crea un objeto con los datos que pasa el usuario
     let user = req.body;
-    console.log(user);
     let response = "";
     // Obtener la respuesta
     yield controller.createUser(user).then((r) => {

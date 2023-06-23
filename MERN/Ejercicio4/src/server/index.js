@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const express_ejs_layouts_1 = __importDefault(require("express-ejs-layouts"));
 // Swagger
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 // Variables de entorno
@@ -33,8 +34,10 @@ mongoose_1.default.connect("mongodb://santos:santos@192.168.43.139:27017/codever
 server.use((0, helmet_1.default)());
 server.use((0, cors_1.default)());
 // Config tipo contenido | Límite de subida a 50 MB
-server.use(express_1.default.urlencoded({ extended: true, limit: '50mb' }));
 server.use(express_1.default.json({ limit: '50mb' }));
+server.use(express_1.default.urlencoded({ extended: true, limit: '50mb' }));
+server.set('view engine', 'ejs');
+server.use(express_ejs_layouts_1.default);
 // Configuración y ruta de Swagger
 server.use('/docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(undefined, {
     swaggerOptions: {

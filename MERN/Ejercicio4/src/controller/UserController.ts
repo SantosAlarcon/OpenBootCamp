@@ -1,7 +1,7 @@
 import { Delete, Get, Query, Route, Tags, Post, Put } from "tsoa";
 import { IUserController } from "./interfaces";
 import { LogSuccess, LogWarning } from "../utils/logger";
-import { getAllUsers, getUserById, deleteUserById, createUser, updateUserById } from "../domain/orm/User.orm";
+import { getAllUsers, getUserById, deleteUserById, createNewUser, updateUserById } from "../domain/orm/User.orm";
 
 @Route("/api/users")
 @Tags("UserController")
@@ -61,28 +61,28 @@ export class UserController implements IUserController {
     * Endpoint que permite añadir un usuario a la BD
     */
     @Post("/")
-    public async createUser(@Query()user: any): Promise<any> {
+    public async createUser(@Query() user: any): Promise<any> {
         let response: any = "";
         LogSuccess(`[/api/users] Añadiendo nuevo usuario ...`);
-        response = await createUser(user);
+        response = await createNewUser(user);
 
         return response;
     }
-    
+
     /**
     * Endpoint que permite actualizar un usuario a la BD
     */
     @Put("/")
-    public async updateUser(@Query()id: string, user: any): Promise<any> {
+    public async updateUser(@Query() id: string, user: any): Promise<any> {
         let response: any = "";
 
         if (id) {
-        LogSuccess(`[/api/users] Modificando los datos del usuario con ID ${id} ...`);
-        await updateUserById(id, user).then((r) => {
-            response = {
-                message: `¡El usuario con ID ${id} se ha actualizado con éxito!`
-            }
-        });
+            LogSuccess(`[/api/users] Modificando los datos del usuario con ID ${id} ...`);
+            await updateUserById(id, user).then((r) => {
+                response = {
+                    message: `¡El usuario con ID ${id} se ha actualizado con éxito!`
+                }
+            });
         } else {
             LogWarning(`[/api/users] Tratando de actualizar datos sin la ID`);
             response = {

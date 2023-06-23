@@ -77,7 +77,7 @@ let UserController = exports.UserController = class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";
             (0, logger_1.LogSuccess)(`[/api/users] Añadiendo nuevo usuario ...`);
-            response = yield (0, User_orm_1.createUser)(user);
+            response = yield (0, User_orm_1.createNewUser)(user);
             return response;
         });
     }

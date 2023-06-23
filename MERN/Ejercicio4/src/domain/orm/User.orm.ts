@@ -43,10 +43,12 @@ export const deleteUserById = async (id: string): Promise<any> => {
 /**
  * Método para crear un nuevo usuario
  */
-export const createUser = async (user: any): Promise<any> => {
+export const createNewUser = async (user: any): Promise<any> => {
 	try {
 		let userModel = userEntity();
-		return await userModel.create(user);
+		return await userModel.create(user)
+            .then((r) => console.log("Usuario creado con éxito"))
+            .catch((error) => console.error(error));
 	} catch (error) {
 		LogError(`Error a la hora de borrar el usuario. ${error}`);
 	}

@@ -22,7 +22,7 @@ import userRouter from "../routes/UserRouter";
 dotenv.config();
 
 // Crear instancia de Express
-const server = express();
+const server: Express = express();
 
 // Definir los endpoints
 server.use("/api", rootRouter);
@@ -40,8 +40,8 @@ server.use(helmet());
 server.use(cors());
 
 // Config tipo contenido | Límite de subida a 50 MB
-server.use(express.urlencoded({extended: true, limit: '50mb'}))
 server.use(express.json({limit: '50mb'}))
+server.use(express.urlencoded({extended: true, limit: '50mb'}))
 
 // Configuración y ruta de Swagger
 server.use(

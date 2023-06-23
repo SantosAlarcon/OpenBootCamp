@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserById = exports.createUser = exports.deleteUserById = exports.getUserById = exports.getAllUsers = void 0;
+exports.updateUserById = exports.createNewUser = exports.deleteUserById = exports.getUserById = exports.getAllUsers = void 0;
 const logger_1 = require("../../utils/logger");
 const User_Entity_1 = require("../entities/User.Entity");
 // CRUD de usuarios
@@ -56,16 +56,18 @@ exports.deleteUserById = deleteUserById;
 /**
  * Método para crear un nuevo usuario
  */
-const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
+const createNewUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let userModel = (0, User_Entity_1.userEntity)();
-        return yield userModel.create(user);
+        return yield userModel.create(user)
+            .then((r) => console.log("Usuario creado con éxito"))
+            .catch((error) => console.error(error));
     }
     catch (error) {
         (0, logger_1.LogError)(`Error a la hora de borrar el usuario. ${error}`);
     }
 });
-exports.createUser = createUser;
+exports.createNewUser = createNewUser;
 /**
  * Método para actualizar los datos de un usuario a partir de la ID
  */

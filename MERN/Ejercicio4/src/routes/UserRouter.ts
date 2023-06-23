@@ -39,10 +39,10 @@ userRouter
 		// Instancia de controlador
 		const controller: UserController = new UserController();
 
+        console.log(`Cuerpo: ${req.body}`)
+
 		// Se crea un objeto con los datos que pasa el usuario
 		let user = req.body;
-
-        console.log(user);
 
 		let response: any = "";
 
