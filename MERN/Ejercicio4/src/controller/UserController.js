@@ -70,6 +70,40 @@ let UserController = exports.UserController = class UserController {
             return response;
         });
     }
+    /**
+    * Endpoint que permite añadir un usuario a la BD
+    */
+    createUser(user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let response = "";
+            (0, logger_1.LogSuccess)(`[/api/users] Añadiendo nuevo usuario ...`);
+            response = yield (0, User_orm_1.createUser)(user);
+            return response;
+        });
+    }
+    /**
+    * Endpoint que permite actualizar un usuario a la BD
+    */
+    updateUser(id, user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let response = "";
+            if (id) {
+                (0, logger_1.LogSuccess)(`[/api/users] Modificando los datos del usuario con ID ${id} ...`);
+                yield (0, User_orm_1.updateUserById)(id, user).then((r) => {
+                    response = {
+                        message: `¡El usuario con ID ${id} se ha actualizado con éxito!`
+                    };
+                });
+            }
+            else {
+                (0, logger_1.LogWarning)(`[/api/users] Tratando de actualizar datos sin la ID`);
+                response = {
+                    message: `Debes proporcionar una ID para actualizar los datos.`
+                };
+            }
+            return response;
+        });
+    }
 };
 __decorate([
     (0, tsoa_1.Get)("/"),
@@ -83,6 +117,14 @@ __decorate([
     (0, tsoa_1.Delete)("/"),
     __param(0, (0, tsoa_1.Query)())
 ], UserController.prototype, "deleteUser", null);
+__decorate([
+    (0, tsoa_1.Post)("/"),
+    __param(0, (0, tsoa_1.Query)())
+], UserController.prototype, "createUser", null);
+__decorate([
+    (0, tsoa_1.Put)("/"),
+    __param(0, (0, tsoa_1.Query)())
+], UserController.prototype, "updateUser", null);
 exports.UserController = UserController = __decorate([
     (0, tsoa_1.Route)("/api/users"),
     (0, tsoa_1.Tags)("UserController")
