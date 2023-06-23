@@ -14,13 +14,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const UserController_1 = require("../controller/UserController");
+const logger_1 = require("../utils/logger");
 // Routers
 let userRouter = express_1.default.Router();
 userRouter.route("/").get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    // Obtiene la id de los parámetros
+    let id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
+    (0, logger_1.LogInfo)(`Query param: ${id}`);
     // Instancia de controlador
     const controller = new UserController_1.UserController();
     // Obtener la respuesta
-    const response = yield controller.getUsers();
+    const response = yield controller.getUsers(id);
     // Devolver la respuesta al cliente
     return res.send(response);
 }));

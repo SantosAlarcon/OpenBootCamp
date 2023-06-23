@@ -1,7 +1,7 @@
 import { Get, Query, Route, Tags } from "tsoa";
 import { IUserController } from "./interfaces";
 import { LogSuccess, LogInfo } from "../utils/logger";
-import { getAllUsers } from "../domain/orm/User.orm";
+import { getAllUsers, getUserById } from "../domain/orm/User.orm";
 
 @Route("/api/users")
 @Tags("UserController")
@@ -11,21 +11,17 @@ export class UserController implements IUserController {
      */
     @Get("/")
     public async getUsers(@Query() id?: string): Promise<any> {
-
-        LogInfo(`${id}`);
-
-        const response: any = "";
+        let response: any;
 
         if (id) {
-            return {
-                message: `Obteniendo datos del usuario ${id}`
-            }
+            LogSuccess(`[/api/users] Obteniendo el usuario con el ID ${id}...`);
+            response = await getUserById(id);
         } else {
             LogSuccess("[/api/users] Obteniendo todos los usuarios...");
-            const response = await getAllUsers();
-            return response;
+            response = await getAllUsers();
         }
 
+        return response;
     }
 
     /**

@@ -28,18 +28,16 @@ let UserController = exports.UserController = class UserController {
      */
     getUsers(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            (0, logger_1.LogInfo)(`${id}`);
-            const response = "";
+            let response;
             if (id) {
-                return {
-                    message: `Obteniendo datos del usuario ${id}`
-                };
+                (0, logger_1.LogSuccess)(`[/api/users] Obteniendo el usuario con el ID ${id}...`);
+                response = yield (0, User_orm_1.getUserById)(id);
             }
             else {
                 (0, logger_1.LogSuccess)("[/api/users] Obteniendo todos los usuarios...");
-                const response = yield (0, User_orm_1.getAllUsers)();
-                return response;
+                response = yield (0, User_orm_1.getAllUsers)();
             }
+            return response;
         });
     }
     /**

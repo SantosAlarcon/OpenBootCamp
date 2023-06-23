@@ -5,6 +5,5 @@ export interface IHelloController {
 }
 export interface IUserController {
     // Obtener todos los usuarios de la BD de MongoDB
-    getUsers(): Promise<any>
-    getUserByID(id: string): Promise<any>
+    getUsers(id?: string): Promise<any>
 }
