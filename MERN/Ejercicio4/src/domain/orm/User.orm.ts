@@ -16,12 +16,27 @@ export const getAllUsers = async (): Promise<any[] | undefined> => {
     }
 }
 
+/**
+ * Método para obtener la información de un sólo usuario.
+ */
 export const getUserById = async (id: string): Promise<any | undefined> => {
     try {
         let userModel = userEntity();
         return await userModel.findById(id)
     } catch (error) {
         LogError(`Error a la hora de obtener el usuario. ${error}`);
+    }
+}
+
+/**
+ * Método para borrar un usuario de la BD
+ */
+export const deleteUserById = async (id: string): Promise<any> => {
+    try {
+        let userModel = userEntity();
+        return await userModel.deleteOne({_id: id})
+    } catch (error) {
+        LogError(`Error a la hora de borrar el usuario. ${error}`); 
     }
 }
 

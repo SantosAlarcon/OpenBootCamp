@@ -51,6 +51,25 @@ let UserController = exports.UserController = class UserController {
             };
         });
     }
+    /**
+    * Endpoint que permite borrar un usuario de la BD.
+    */
+    deleteUser(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let response;
+            if (id) {
+                (0, logger_1.LogSuccess)(`[/api/users] Borrando el usuario con el ID ${id}...`);
+                response = yield (0, User_orm_1.deleteUserById)(id);
+            }
+            else {
+                (0, logger_1.LogWarning)("[/api/users] Tratando de borrar el usuario sin el ID...");
+                response = {
+                    message: "Introduce una ID válida para borrar el usuario de la BD."
+                };
+            }
+            return response;
+        });
+    }
 };
 __decorate([
     (0, tsoa_1.Get)("/"),
@@ -60,6 +79,10 @@ __decorate([
     (0, tsoa_1.Get)("/"),
     __param(0, (0, tsoa_1.Query)())
 ], UserController.prototype, "getUserByID", null);
+__decorate([
+    (0, tsoa_1.Delete)("/"),
+    __param(0, (0, tsoa_1.Query)())
+], UserController.prototype, "deleteUser", null);
 exports.UserController = UserController = __decorate([
     (0, tsoa_1.Route)("/api/users"),
     (0, tsoa_1.Tags)("UserController")

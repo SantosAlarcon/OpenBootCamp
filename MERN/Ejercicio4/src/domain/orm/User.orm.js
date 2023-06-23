@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserById = exports.getAllUsers = void 0;
+exports.deleteUserById = exports.getUserById = exports.getAllUsers = void 0;
 const logger_1 = require("../../utils/logger");
 const User_Entity_1 = require("../entities/User.Entity");
 // CRUD de usuarios
@@ -27,6 +27,9 @@ const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getAllUsers = getAllUsers;
+/**
+ * Método para obtener la información de un sólo usuario.
+ */
 const getUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let userModel = (0, User_Entity_1.userEntity)();
@@ -37,5 +40,18 @@ const getUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUserById = getUserById;
+/**
+ * Método para borrar un usuario de la BD
+ */
+const deleteUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let userModel = (0, User_Entity_1.userEntity)();
+        return yield userModel.deleteOne({ _id: id });
+    }
+    catch (error) {
+        (0, logger_1.LogError)(`Error a la hora de borrar el usuario. ${error}`);
+    }
+});
+exports.deleteUserById = deleteUserById;
 // PENDIENTE
 // GetId, GetEmail, Delete, Update, Create
