@@ -39,23 +39,25 @@ userRouter
 		// Instancia de controlador
 		const controller: UserController = new UserController();
 
-        console.log(`Cuerpo: ${req.body}`)
+        const name = req?.query?.name;
+        const email = req?.query?.email;
+        const age = req?.query?.age;
 
 		// Se crea un objeto con los datos que pasa el usuario
-		let user = req.body;
+		const newUser = { name: name, email: email, age: age };
 
 		let response: any = "";
 
 		// Obtener la respuesta
-		await controller.createUser(user).then((r) => {
-			LogSuccess(`[/api/users] Crear usuario: ${user}`);
+		await controller.createUser(newUser).then((r) => {
+			LogSuccess(`[/api/users] Crear usuario: ${newUser}`);
 			response = {
-				message: `¡El usuario ${user.name} añadido con éxito a la BD!`,
+				message: `¡El usuario ${newUser.name} añadido con éxito a la BD!`,
 			};
 		});
 
 		// Devolver la respuesta al cliente
-		return res.send(response);
+		return res.send(newUser);
 	})
 	.put(async (req: Request, res: Response) => {
 		// Obtiene la id de los parámetros

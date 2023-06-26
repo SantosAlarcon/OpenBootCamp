@@ -17,7 +17,7 @@ let server = (0, express_1.default)();
 let rootRouter = express_1.default.Router();
 // Endpoint GET
 rootRouter.get("/", (req, res) => {
-    (0, logger_1.LogInfo)('GET: https://localhost:3000/api/');
+    (0, logger_1.LogInfo)('GET: http://localhost:3000/api/');
     res.send("Bienvenido a mi API Restful: Express + TS + Nodemon + Jest + Swagger + Mongoose");
 });
 // Redirecciones a routers
