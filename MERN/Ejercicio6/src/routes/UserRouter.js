@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const UserController_1 = require("../controller/UserController");
 const logger_1 = require("../utils/logger");
+const bcrypt_ts_1 = __importDefault(require("bcrypt-ts"));
 // Routers
 let userRouter = express_1.default.Router();
 userRouter
@@ -70,7 +71,7 @@ userRouter
     const newUser = { name: name, email: email, age: age };
     let response = "";
     // Obtener la respuesta
-    yield controller.createUser(newUser).then((r) => {
+    yield controller.createNewUser(newUser).then((r) => {
         (0, logger_1.LogSuccess)(`[/api/users] Crear usuario: ${newUser}`);
         response = {
             message: `¡El usuario ${newUser.name} añadido con éxito a la BD!`,
@@ -109,5 +110,21 @@ userRouter
     }
     // Devolver la respuesta al cliente
     return res.status(response.status).send(response);
+}));
+userRouter.route("/auth/register")
+    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { name, email, age, password } = req.body;
+    let hashedPassword = "";
+    if (password && name && email && age) {
+        hashedPassword = bcrypt_ts_1.default.hashSync(req.body.password, 8);
+    }
+    let newUser = {
+        name,
+        email,
+        age,
+        password: hashedPassword
+    };
+    const controller = new UserController_1.UserController();
+    const response = yield controller.register(newUser);
 }));
 exports.default = userRouter;
