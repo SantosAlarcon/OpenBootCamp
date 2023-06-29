@@ -1,9 +1,9 @@
 import { IUser } from "../../controller/interfaces/IUser.interface";
 import { IAuth } from "../../controller/interfaces/IAuth.interface";
 import { LogError, LogSuccess } from "../../utils/logger";
-import { userEntity } from "../entities/User.Entity"0;
-import bcrypt from "bcrypt-ts";
-import jwt, { Jwt } from "jsonwebtoken";
+import { userEntity } from "../entities/User.Entity";
+import * as bcrypt from "bcrypt";
+import * as jwt from "jsonwebtoken";
 
 // CRUD de usuarios
 /**

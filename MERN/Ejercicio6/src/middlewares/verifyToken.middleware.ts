@@ -1,5 +1,5 @@
-import { NextFunction } from "express";
-import Jwt from "jsonwebtoken";
+import { NextFunction, Request, Response } from "express";
+import * as jwt from "jsonwebtoken";
 
 /**
  * Función que verifa el token de autenticación
@@ -14,7 +14,7 @@ export const verifyToken = (
 	next: NextFunction
 ) => {
 	// Comprobar la cabecera de la petición del cliente
-	let jwtToken: any = req.headers.get("x-access-token");
+	let jwtToken: any = req.headers["x-access-token"];
 
 	if (!jwtToken) {
 		return res.status(403).send({
@@ -23,7 +23,7 @@ export const verifyToken = (
 		});
 	}
 
-	Jwt.verify(jwtToken, "", (error: any, decoded: any) => {
+	jwt.verify(jwtToken, "", (error: any, decoded: any) => {
 		if (error) {
 			return res.status(500).send({
 				authenticationError: "Error de verificación de JWT",

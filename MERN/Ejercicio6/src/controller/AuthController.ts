@@ -1,20 +1,20 @@
-import { Post, Route, Tags } from "tsoa";
+import { Post, Route, Tags, Query } from "tsoa";
 import { LogSuccess, LogWarning } from "../utils/logger";
 import { IAuthController } from "./interfaces";
 import { IUser } from "./interfaces/IUser.interface";
-import { registerNewUser, loginUser, logoutUser } from "../domain/orm/Auth.orm";
 import { IAuth } from "./interfaces/IAuth.interface";
+import { loginUser, registerUser } from "../domain/orm/User.orm";
 
 @Route("/api/users")
 @Tags("AuthController")
 export class AuthController implements IAuthController {
-    @Post("/auth")
+    @Post("/register")
     public async registerUser(user: IUser): Promise<any> {
         let response: any = "";
 
         if (user) {
             LogSuccess(`[/api/auth/register] Registrando nuevo usuario ${user.name}`)
-            await this.registerUser(user).then(r => {
+            await registerUser(user).then((r: Response) => {
                 response = {
                     message: `¡El usuario ${user.name} se ha registrado con éxito!`
                 }
@@ -36,7 +36,7 @@ export class AuthController implements IAuthController {
 
         if (auth) {
             LogSuccess(`[/api/login] Iniciando sesión del usuario ${auth.email}`)
-            await this.loginUser(auth).then(r => {
+            await loginUser(auth).then((r: any) => {
                 response = {
                     message: `¡El usuario ${auth.email} ha iniciado sesión correctamente!`,
                     token: r.token
@@ -56,5 +56,6 @@ export class AuthController implements IAuthController {
     public async logoutUser(): Promise<IAuth> {
         let response: any = "";
 
+        return response;
     }
 }

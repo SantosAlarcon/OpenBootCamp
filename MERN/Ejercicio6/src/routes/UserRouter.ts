@@ -1,10 +1,7 @@
 import express, { Request, Response } from "express";
-import { UserController } from "../controller/UserController";
+import { UsersController } from "../controller/UsersController";
 import { LogInfo, LogSuccess, LogWarning } from "../utils/logger";
-import bcrypt from "bcrypt-ts"
-import { IUser } from "../controller/interfaces/IUser.interface";
-import { Controller } from "tsoa";
-import { IAuthController } from "../controller/interfaces";
+import * as bcrypt from "bcrypt"
 
 // Routers
 let userRouter = express.Router();
@@ -17,7 +14,7 @@ userRouter
         LogInfo(`Query param: ${id}`);
 
         // Instancia de controlador
-        const controller: UserController = new UserController();
+        const controller: UsersController = new UsersController();
 
         // Obtener la respuesta
         const response: any = await controller.getUsers(id);
@@ -33,7 +30,7 @@ userRouter
         let response: any = "";
 
         // Instancia de controlador
-        const controller: UserController = new UserController();
+        const controller: UsersController = new UsersController();
 
         if (id) {
             LogSuccess(`[/api/users] Borrando usuario con el ID ${id}`);
@@ -57,7 +54,7 @@ userRouter
     })
     .post(async (req: Request, res: Response) => {
         // Instancia de controlador
-        const controller: UserController = new UserController();
+        const controller: UsersController = new UsersController();
 
         const name = req?.query?.name;
         const email = req?.query?.email;
@@ -69,7 +66,7 @@ userRouter
         let response: any = "";
 
         // Obtener la respuesta
-        await controller.createNewUser(newUser).then((r) => {
+        await controller.createUser(newUser).then((r: Response) => {
             LogSuccess(`[/api/users] Crear usuario: ${newUser}`);
             response = {
                 message: `¡El usuario ${newUser.name} añadido con éxito a la BD!`,
@@ -85,7 +82,7 @@ userRouter
         LogInfo(`Query param: ${id}`);
 
         // Instancia de controlador
-        const controller: UserController = new UserController();
+        const controller: UsersController = new UsersController();
 
         // Se crea un objeto con los datos que pasa el usuario
         let user = req.body;

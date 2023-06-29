@@ -13,9 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const UserController_1 = require("../controller/UserController");
+const UsersController_1 = require("../controller/UsersController");
 const logger_1 = require("../utils/logger");
-const bcrypt_ts_1 = __importDefault(require("bcrypt-ts"));
 // Routers
 let userRouter = express_1.default.Router();
 userRouter
@@ -26,7 +25,7 @@ userRouter
     let id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
     (0, logger_1.LogInfo)(`Query param: ${id}`);
     // Instancia de controlador
-    const controller = new UserController_1.UserController();
+    const controller = new UsersController_1.UsersController();
     // Obtener la respuesta
     const response = yield controller.getUsers(id);
     // Devolver la respuesta al cliente y el código de estado.
@@ -39,7 +38,7 @@ userRouter
     (0, logger_1.LogInfo)(`Query param: ${id}`);
     let response = "";
     // Instancia de controlador
-    const controller = new UserController_1.UserController();
+    const controller = new UsersController_1.UsersController();
     if (id) {
         (0, logger_1.LogSuccess)(`[/api/users] Borrando usuario con el ID ${id}`);
         // Obtener la respuesta
@@ -63,7 +62,7 @@ userRouter
     .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d, _e;
     // Instancia de controlador
-    const controller = new UserController_1.UserController();
+    const controller = new UsersController_1.UsersController();
     const name = (_c = req === null || req === void 0 ? void 0 : req.query) === null || _c === void 0 ? void 0 : _c.name;
     const email = (_d = req === null || req === void 0 ? void 0 : req.query) === null || _d === void 0 ? void 0 : _d.email;
     const age = (_e = req === null || req === void 0 ? void 0 : req.query) === null || _e === void 0 ? void 0 : _e.age;
@@ -71,7 +70,7 @@ userRouter
     const newUser = { name: name, email: email, age: age };
     let response = "";
     // Obtener la respuesta
-    yield controller.createNewUser(newUser).then((r) => {
+    yield controller.createUser(newUser).then((r) => {
         (0, logger_1.LogSuccess)(`[/api/users] Crear usuario: ${newUser}`);
         response = {
             message: `¡El usuario ${newUser.name} añadido con éxito a la BD!`,
@@ -86,7 +85,7 @@ userRouter
     let id = (_f = req === null || req === void 0 ? void 0 : req.query) === null || _f === void 0 ? void 0 : _f.id;
     (0, logger_1.LogInfo)(`Query param: ${id}`);
     // Instancia de controlador
-    const controller = new UserController_1.UserController();
+    const controller = new UsersController_1.UsersController();
     // Se crea un objeto con los datos que pasa el usuario
     let user = req.body;
     console.log(user);
@@ -110,21 +109,5 @@ userRouter
     }
     // Devolver la respuesta al cliente
     return res.status(response.status).send(response);
-}));
-userRouter.route("/auth/register")
-    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { name, email, age, password } = req.body;
-    let hashedPassword = "";
-    if (password && name && email && age) {
-        hashedPassword = bcrypt_ts_1.default.hashSync(req.body.password, 8);
-    }
-    let newUser = {
-        name,
-        email,
-        age,
-        password: hashedPassword
-    };
-    const controller = new UserController_1.UserController();
-    const response = yield controller.register(newUser);
 }));
 exports.default = userRouter;

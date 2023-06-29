@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
 import { AuthController } from "../controller/AuthController";
-import bcrypt from "bcrypt-ts";
 import { IUser } from "../controller/interfaces/IUser.interface";
 import { IAuthController } from "../controller/interfaces";
 import { IAuth } from "../controller/interfaces/IAuth.interface";
+import * as bcrypt from "bcrypt";
 
 let authRouter = express.Router();
 
