@@ -115,29 +115,4 @@ userRouter
     return res.status(response.status).send(response);
   });
 
-userRouter.route("/auth/register")
-  .post(async (req: Request, response: Response) => {
-
-    let { name, email, age, password } = req.body;
-
-    let hashedPassword = "";
-
-    if (password && name && email && age) {
-      hashedPassword = bcrypt.hashSync(req.body.password, 8)
-    }
-
-    let newUser: IUser = {
-      name,
-      email,
-      age,
-      password: hashedPassword
-    }
-
-    const controller: UserController = new UserController();
-
-    const response: any = await controller.register(newUser);
-
-  })
-
-
 export default userRouter;
