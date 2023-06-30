@@ -20,11 +20,4 @@ rootRouter.get("/", (req: Request, res: Response) => {
   res.send("Bienvenido a mi API Restful: Express + TS + Nodemon + Jest + Swagger + Mongoose");
 })
 
-// Redirecciones a routers
-server.use("/", rootRouter);
-server.use("/hello", helloRouter);
-server.use("/users", userRouter);
-server.use("/katas", kataRouter);
-server.use("/auth", authRouter);
-
 export default server;
