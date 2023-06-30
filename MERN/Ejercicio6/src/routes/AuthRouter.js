@@ -38,10 +38,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const AuthController_1 = require("../controller/AuthController");
 const bcrypt = __importStar(require("bcrypt"));
+const body_parser_1 = __importDefault(require("body-parser"));
+let jsonParser = body_parser_1.default.json();
 let authRouter = express_1.default.Router();
-authRouter.route("/auth/register")
-    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { name, email, age, password } = req.body;
+authRouter.route("/register")
+    .post(jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { name, email, age, password } = req === null || req === void 0 ? void 0 : req.body;
     let hashedPassword = "";
     if (password && name && email && age) {
         hashedPassword = bcrypt.hashSync(req.body.password, 8);
@@ -56,9 +58,10 @@ authRouter.route("/auth/register")
     const response = yield controller.registerUser(newUser);
     return res.send(response).status(200);
 }));
-authRouter.route("/auth/login")
-    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+authRouter.route("/login")
+    .post(jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { email, password } = req.body;
+    console.log(req.body);
     if (password && email) {
         const controller = new AuthController_1.AuthController();
         let auth = {

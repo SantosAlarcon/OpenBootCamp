@@ -44,7 +44,7 @@ let AuthController = exports.AuthController = class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";
             if (auth) {
-                (0, logger_1.LogSuccess)(`[/api/login] Iniciando sesión del usuario ${auth.email}`);
+                (0, logger_1.LogSuccess)(`[/api/auth/login] Iniciando sesión del usuario ${auth.email}`);
                 yield (0, User_orm_1.loginUser)(auth).then((r) => {
                     response = {
                         message: `¡El usuario ${auth.email} ha iniciado sesión correctamente!`,
@@ -53,7 +53,7 @@ let AuthController = exports.AuthController = class AuthController {
                 });
             }
             else {
-                (0, logger_1.LogWarning)(`[/api/login] Tratando de iniciar sesión sin la autenticación`);
+                (0, logger_1.LogWarning)(`[/api/auth/login] Tratando de iniciar sesión sin la autenticación`);
                 response = {
                     message: "Es obligatorio autentificarse para iniciar sesión."
                 };
@@ -69,7 +69,7 @@ let AuthController = exports.AuthController = class AuthController {
     }
 };
 __decorate([
-    (0, tsoa_1.Post)("/auth")
+    (0, tsoa_1.Post)("/register")
 ], AuthController.prototype, "registerUser", null);
 __decorate([
     (0, tsoa_1.Post)("/login")
@@ -78,6 +78,6 @@ __decorate([
     (0, tsoa_1.Post)("/logout")
 ], AuthController.prototype, "logoutUser", null);
 exports.AuthController = AuthController = __decorate([
-    (0, tsoa_1.Route)("/api/users"),
+    (0, tsoa_1.Route)("/api/auth"),
     (0, tsoa_1.Tags)("AuthController")
 ], AuthController);

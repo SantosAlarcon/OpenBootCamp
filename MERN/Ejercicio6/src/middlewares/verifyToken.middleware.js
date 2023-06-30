@@ -1,15 +1,4 @@
 "use strict";
-<<<<<<< HEAD
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyToken = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-/**
- * Función que verifa el token de autenticación
-* @param req Petición original del middlware de JWT
-=======
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -39,27 +28,12 @@ const jwt = __importStar(require("jsonwebtoken"));
 /**
  * Función que verifa el token de autenticación
  * @param req Petición original del middlware de JWT
->>>>>>> 8e523229e7c1c6f9b251fe8568a0213a267ca630
  * @param res Respuesta a la verificación del JWT
  * @param next Siguiente función a ejecutar
  * @returns Error de la verificación de la ejecución siguiente
  */
 const verifyToken = (req, res, next) => {
     // Comprobar la cabecera de la petición del cliente
-<<<<<<< HEAD
-    let jwtToken = req.headers['x-access-token'];
-    if (!jwtToken) {
-        return res.status(403).send({
-            authenticationError: 'JWT no encontrado en la petición',
-            message: "No estás autorizado para usar este endpoint"
-        });
-    }
-    jsonwebtoken_1.default.verify(jwtToken, "", (error, decoded) => {
-        if (error) {
-            return res.status(500).send({
-                authenticationError: "Error de verificación de JWT",
-                message: "Fallo al verificar el JWT en la petición"
-=======
     let jwtToken = req.headers["x-access-token"];
     if (!jwtToken) {
         return res.status(403).send({
@@ -72,7 +46,6 @@ const verifyToken = (req, res, next) => {
             return res.status(500).send({
                 authenticationError: "Error de verificación de JWT",
                 message: "Fallo al verificar el JWT en la petición",
->>>>>>> 8e523229e7c1c6f9b251fe8568a0213a267ca630
             });
         }
         //req.userId = decoded.id

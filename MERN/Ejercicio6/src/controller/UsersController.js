@@ -123,7 +123,8 @@ __decorate([
 ], UsersController.prototype, "createUser", null);
 __decorate([
     (0, tsoa_1.Put)("/"),
-    __param(0, (0, tsoa_1.Query)())
+    __param(0, (0, tsoa_1.Query)()),
+    __param(1, (0, tsoa_1.Query)())
 ], UsersController.prototype, "updateUser", null);
 exports.UsersController = UsersController = __decorate([
     (0, tsoa_1.Route)("/api/users"),

@@ -1,5 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import mongoose from "mongoose";
+import server from "../routes";
+import { rootRouter } from "../routes";
 
 // Swagger
 import swaggerUI from "swagger-ui-express"
@@ -11,22 +13,11 @@ import "dotenv/config";
 import cors from "cors"
 import helmet from "helmet"
 
-// Root router
-import rootRouter from "../routes"
-
-// Routers
-import helloRouter from "../routes/HelloRouter";
-import userRouter from "../routes/UserRouter";
-import kataRouter from "../routes/KataRouter";
-
 // Crear instancia de Express
-const server: Express = express();
+//const server: Express = express();
 
-// Definir los endpoints
+// Carga la ruta raíz que permite cargar el resto.
 server.use("/api", rootRouter);
-server.use("/api/hello", helloRouter);
-server.use("/api/users", userRouter);
-server.use("/api/katas", kataRouter);
 
 // Servidor estático
 server.use(express.static("public"));

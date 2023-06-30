@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const UsersController_1 = require("../controller/UsersController");
 const logger_1 = require("../utils/logger");
-const bcrypt_1 = __importDefault(require("bcrypt"));
 // Routers
 let userRouter = express_1.default.Router();
 userRouter
@@ -110,21 +109,5 @@ userRouter
     }
     // Devolver la respuesta al cliente
     return res.status(response.status).send(response);
-}));
-userRouter.route("/auth/register")
-    .post((req, response) => __awaiter(void 0, void 0, void 0, function* () {
-    let { name, email, age, password } = req.body;
-    let hashedPassword = "";
-    if (password && name && email && age) {
-        hashedPassword = bcrypt_1.default.hashSync(req.body.password, 8);
-    }
-    let newUser = {
-        name,
-        email,
-        age,
-        password: hashedPassword
-    };
-    const controller = new UserController_1.UserController();
-    const response = yield controller.register(newUser);
 }));
 exports.default = userRouter;

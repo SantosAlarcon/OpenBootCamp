@@ -1,17 +1,20 @@
-<<<<<<< HEAD
-import * as bcrypt from "bcrypt";
-import express from "express";
+import express, { Request, Response } from "express";
+import { AuthController } from "../controller/AuthController";
 import { IUser } from "../controller/interfaces/IUser.interface";
 import { IAuthController } from "../controller/interfaces";
 import { IAuth } from "../controller/interfaces/IAuth.interface";
-import { AuthController } from "../controller/AuthController";
+import * as bcrypt from "bcrypt";
+import { LogInfo } from "../utils/logger";
+import bodyParser from "body-parser";
 
-const authRouter = express.Router();
+let jsonParser = bodyParser.json();
 
-authRouter.route("/auth/register")
-  .post(async (req: Request, res: Response) => {
+let authRouter = express.Router();
 
-    let { name, email, age, password } = req.body;
+authRouter.route("/register")
+  .post(jsonParser, async (req: Request, res: Response) => {
+
+    let { name, email, age, password } = req?.body;
 
     let hashedPassword = "";
 
@@ -26,69 +29,36 @@ authRouter.route("/auth/register")
       password: hashedPassword
     }
 
-    const controller: AuthController = new AuthController();
+    const controller: IAuthController = new AuthController();
 
-    const response: any = await controller.register(newUser);
+    const response: any = await controller.registerUser(newUser);
+
+    return res.send(response).status(200);
 
   })
-=======
-import express, { Request, Response } from "express";
-import { AuthController } from "../controller/AuthController";
-import { IUser } from "../controller/interfaces/IUser.interface";
-import { IAuthController } from "../controller/interfaces";
-import { IAuth } from "../controller/interfaces/IAuth.interface";
-import * as bcrypt from "bcrypt";
 
-let authRouter = express.Router();
+authRouter.route("/login")
+  .post(jsonParser, async (req: Request, res: Response) => {
 
-authRouter.route("/auth/register")
-    .post(async (req: Request, res: Response) => {
+    let { email, password } = req.body;
 
-        let { name, email, age, password } = req.body;
+    console.log(req.body)
 
-        let hashedPassword = "";
+    if (password && email) {
 
-        if (password && name && email && age) {
-            hashedPassword = bcrypt.hashSync(req.body.password, 8)
-        }
+      const controller: IAuthController = new AuthController();
 
-        let newUser: IUser = {
-            name,
-            email,
-            age,
-            password: hashedPassword
-        }
+      let auth: IAuth = {
+        email: email,
+        password: password
+      }
 
-        const controller: IAuthController = new AuthController();
+      const response: any = await controller.loginUser(auth);
 
-        const response: any = await controller.registerUser(newUser);
+      // Envía la respuesta al cliente con el token AWT
+      return res.send(response).status(200);
+    }
 
-        return res.send(response).status(200);
-
-    })
-
-authRouter.route("/auth/login")
-    .post(async (req: Request, res: Response) => {
-
-        let { email, password } = req.body;
-
-
-        if (password && email) {
-
-            const controller: IAuthController = new AuthController();
-
-            let auth: IAuth = {
-                email: email,
-                password: password
-            }
-
-            const response: any = await controller.loginUser(auth);
-
-            // Envía la respuesta al cliente con el token AWT
-            return res.send(response).status(200);
-        }
-
-    })
->>>>>>> 8e523229e7c1c6f9b251fe8568a0213a267ca630
+  })
 
 export default authRouter;
