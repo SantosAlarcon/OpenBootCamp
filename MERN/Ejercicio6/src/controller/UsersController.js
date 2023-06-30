@@ -18,11 +18,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserController = void 0;
+exports.UsersController = void 0;
 const tsoa_1 = require("tsoa");
 const logger_1 = require("../utils/logger");
 const User_orm_1 = require("../domain/orm/User.orm");
-let UserController = exports.UserController = class UserController {
+let UsersController = exports.UsersController = class UsersController {
     /**
      * Endpoint que devuelve la lista de usuarios.
      */
@@ -108,25 +108,24 @@ let UserController = exports.UserController = class UserController {
 __decorate([
     (0, tsoa_1.Get)("/"),
     __param(0, (0, tsoa_1.Query)())
-], UserController.prototype, "getUsers", null);
+], UsersController.prototype, "getUsers", null);
 __decorate([
     (0, tsoa_1.Get)("/"),
     __param(0, (0, tsoa_1.Query)())
-], UserController.prototype, "getUserByID", null);
+], UsersController.prototype, "getUserByID", null);
 __decorate([
     (0, tsoa_1.Delete)("/"),
     __param(0, (0, tsoa_1.Query)())
-], UserController.prototype, "deleteUser", null);
+], UsersController.prototype, "deleteUser", null);
 __decorate([
     (0, tsoa_1.Post)("/"),
     __param(0, (0, tsoa_1.Query)())
-], UserController.prototype, "createUser", null);
+], UsersController.prototype, "createUser", null);
 __decorate([
     (0, tsoa_1.Put)("/"),
     __param(0, (0, tsoa_1.Query)())
-], UserController.prototype, "updateUser", null);
-exports.UserController = UserController = __decorate([
-    (0, tsoa_1.Path)("users"),
+], UsersController.prototype, "updateUser", null);
+exports.UsersController = UsersController = __decorate([
     (0, tsoa_1.Route)("/api/users"),
-    (0, tsoa_1.Tags)("UserController")
-], UserController);
+    (0, tsoa_1.Tags)("UsersController")
+], UsersController);

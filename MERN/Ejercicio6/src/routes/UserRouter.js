@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const UserController_1 = require("../controller/UserController");
+const UsersController_1 = require("../controller/UsersController");
 const logger_1 = require("../utils/logger");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 // Routers
@@ -26,7 +26,7 @@ userRouter
     let id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
     (0, logger_1.LogInfo)(`Query param: ${id}`);
     // Instancia de controlador
-    const controller = new UserController_1.UserController();
+    const controller = new UsersController_1.UsersController();
     // Obtener la respuesta
     const response = yield controller.getUsers(id);
     // Devolver la respuesta al cliente y el código de estado.
@@ -39,7 +39,7 @@ userRouter
     (0, logger_1.LogInfo)(`Query param: ${id}`);
     let response = "";
     // Instancia de controlador
-    const controller = new UserController_1.UserController();
+    const controller = new UsersController_1.UsersController();
     if (id) {
         (0, logger_1.LogSuccess)(`[/api/users] Borrando usuario con el ID ${id}`);
         // Obtener la respuesta
@@ -63,7 +63,7 @@ userRouter
     .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d, _e;
     // Instancia de controlador
-    const controller = new UserController_1.UserController();
+    const controller = new UsersController_1.UsersController();
     const name = (_c = req === null || req === void 0 ? void 0 : req.query) === null || _c === void 0 ? void 0 : _c.name;
     const email = (_d = req === null || req === void 0 ? void 0 : req.query) === null || _d === void 0 ? void 0 : _d.email;
     const age = (_e = req === null || req === void 0 ? void 0 : req.query) === null || _e === void 0 ? void 0 : _e.age;
@@ -86,7 +86,7 @@ userRouter
     let id = (_f = req === null || req === void 0 ? void 0 : req.query) === null || _f === void 0 ? void 0 : _f.id;
     (0, logger_1.LogInfo)(`Query param: ${id}`);
     // Instancia de controlador
-    const controller = new UserController_1.UserController();
+    const controller = new UsersController_1.UsersController();
     // Se crea un objeto con los datos que pasa el usuario
     let user = req.body;
     console.log(user);

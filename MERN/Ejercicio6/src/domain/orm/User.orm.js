@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -9,9 +32,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserById = exports.createNewUser = exports.deleteUserById = exports.getUserById = exports.getAllUsers = void 0;
+exports.logoutUser = exports.loginUser = exports.registerUser = exports.updateUserById = exports.createNewUser = exports.deleteUserById = exports.getUserById = exports.getAllUsers = void 0;
 const logger_1 = require("../../utils/logger");
 const User_Entity_1 = require("../entities/User.Entity");
+const bcrypt = __importStar(require("bcrypt"));
+const jwt = __importStar(require("jsonwebtoken"));
 // CRUD de usuarios
 /**
  * Método para obtener todos los usuarios de la colección "usuarios" de la BD de MongoDB.
@@ -81,3 +106,53 @@ const updateUserById = (id, user) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.updateUserById = updateUserById;
+/**
+ * Método para registrar usuario
+ */
+const registerUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let userModel = (0, User_Entity_1.userEntity)();
+        return yield userModel.create(user);
+    }
+    catch (error) {
+        (0, logger_1.LogError)(`Error del ORM a la hora de crear el usuario ${user.name}. ${error}`);
+    }
+});
+exports.registerUser = registerUser;
+/**
+ * Método para iniciar sesión
+ */
+const loginUser = (auth) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let userModel = (0, User_Entity_1.userEntity)();
+        userModel.findOne({ email: auth.email }, (error, user) => {
+            if (error) {
+                (0, logger_1.LogError)(`El usuario ${auth.email} no existe en la BD.`);
+            }
+            if (!user) {
+                (0, logger_1.LogError)(`El usuario ${auth.email} no existe en la BD.`);
+            }
+            // Utiliza BCrypt para comparar la contraseña.
+            let validPassword = bcrypt.compareSync(auth.password, user.password);
+            // Si la contraseña no es válida
+            if (!validPassword) {
+                // Se envia un error 401 - NO AUTORIZADO
+            }
+            // La palabra secreta estará guardada en el archivo .env para descifrar
+            // la contraseña.
+            let token = jwt.sign({ email: user.email }, "SECRET", {
+                expiresIn: "2h"
+            });
+            return token;
+        });
+    }
+    catch (_a) {
+    }
+});
+exports.loginUser = loginUser;
+/**
+ * Método para cerrar sesión
+ */
+const logoutUser = (auth) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.logoutUser = logoutUser;
