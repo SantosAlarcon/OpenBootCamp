@@ -29,6 +29,8 @@ authRouter.route("/register")
       password: hashedPassword
     }
 
+    LogInfo(`La contraseña cifrada es: ${newUser.password}`);
+
     const controller: IAuthController = new AuthController();
 
     const response: any = await controller.registerUser(newUser);

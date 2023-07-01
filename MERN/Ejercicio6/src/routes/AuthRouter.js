@@ -38,6 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const AuthController_1 = require("../controller/AuthController");
 const bcrypt = __importStar(require("bcrypt"));
+const logger_1 = require("../utils/logger");
 const body_parser_1 = __importDefault(require("body-parser"));
 let jsonParser = body_parser_1.default.json();
 let authRouter = express_1.default.Router();
@@ -54,6 +55,7 @@ authRouter.route("/register")
         age,
         password: hashedPassword
     };
+    (0, logger_1.LogInfo)(`La contraseña cifrada es: ${newUser.password}`);
     const controller = new AuthController_1.AuthController();
     const response = yield controller.registerUser(newUser);
     return res.send(response).status(200);
