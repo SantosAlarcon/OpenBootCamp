@@ -1,3 +1,4 @@
+import { IKata } from "../../controller/interfaces/IKata.interface";
 import { LogError, LogSuccess } from "../../utils/logger";
 import { kataEntity } from "../entities/Kata.Entity";
 
@@ -91,21 +92,21 @@ export const deleteKataById = async (id: string): Promise<any> => {
 /**
  * Método para crear un nuevo kata
  */
-export const createNewKata = async (kata: any): Promise<any> => {
+export const createNewKata = async (kata: IKata): Promise<any> => {
   try {
     let kataModel = kataEntity();
     return await kataModel.create(kata)
       .then((r) => console.log("Kata creado con éxito"))
       .catch((error: Error) => console.error(error));
   } catch (error) {
-    LogError(`Error a la hora de borrar el kata. ${error}`);
+    LogError(`Error a la hora de crear el kata. ${error}`);
   }
 };
 
 /**
  * Método para actualizar los datos de un kata a partir de la ID
  */
-export const updateKataById = async (id: string, kata: any): Promise<any> => {
+export const updateKataById = async (id: string, kata: IKata): Promise<any> => {
   try {
     let kataModel = kataEntity();
     return await kataModel.findByIdAndUpdate(id, kata);
