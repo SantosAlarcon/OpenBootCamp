@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { UsersController } from "../controller/UsersController";
 import { LogInfo, LogSuccess, LogWarning } from "../utils/logger";
 import bodyParser from "body-parser"
+import { verifyToken } from "../middlewares/verifyToken.middleware";
 
 let jsonParser = bodyParser.json();
 
@@ -10,7 +11,7 @@ let userRouter = express.Router();
 
 userRouter
   .route("/")
-  .get(async (req: Request, res: Response) => {
+  .get(verifyToken, async (req: Request, res: Response) => {
     // Obtiene la id de los parámetros
     let id: any = req?.query?.id;
     LogInfo(`Query param: ${id}`);
@@ -24,7 +25,7 @@ userRouter
     // Devolver la respuesta al cliente y el código de estado.
     return res.send(response).status(200);
   })
-  .delete(async (req: Request, res: Response) => {
+  .delete(verifyToken, async (req: Request, res: Response) => {
     // Obtiene la id de los parámetros
     let id: any = req?.query?.id;
     LogInfo(`Query param: ${id}`);
@@ -54,7 +55,7 @@ userRouter
     // Devolver la respuesta al cliente y el código de estado.
     return res.send(response).status(response.status);
   })
-  .put(jsonParser, async (req: Request, res: Response) => {
+  .put(verifyToken, jsonParser, async (req: Request, res: Response) => {
     // Obtiene la id de los parámetros
     let id: any = req?.query?.id;
     LogInfo(`Query param: ${id}`);
