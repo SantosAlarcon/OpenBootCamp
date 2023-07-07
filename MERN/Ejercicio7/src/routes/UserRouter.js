@@ -16,12 +16,13 @@ const express_1 = __importDefault(require("express"));
 const UsersController_1 = require("../controller/UsersController");
 const logger_1 = require("../utils/logger");
 const body_parser_1 = __importDefault(require("body-parser"));
+const verifyToken_middleware_1 = require("../middlewares/verifyToken.middleware");
 let jsonParser = body_parser_1.default.json();
 // Routers
 let userRouter = express_1.default.Router();
 userRouter
     .route("/")
-    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    .get(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     // Obtiene la id de los parámetros
     let id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
@@ -33,7 +34,7 @@ userRouter
     // Devolver la respuesta al cliente y el código de estado.
     return res.send(response).status(200);
 }))
-    .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    .delete(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     // Obtiene la id de los parámetros
     let id = (_b = req === null || req === void 0 ? void 0 : req.query) === null || _b === void 0 ? void 0 : _b.id;

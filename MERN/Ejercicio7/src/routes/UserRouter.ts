@@ -55,7 +55,7 @@ userRouter
     // Devolver la respuesta al cliente y el código de estado.
     return res.send(response).status(response.status);
   })
-  .put(verifyToken, jsonParser, async (req: Request, res: Response) => {
+  .put(jsonParser, async (req: Request, res: Response) => {
     // Obtiene la id de los parámetros
     let id: any = req?.query?.id;
     LogInfo(`Query param: ${id}`);
