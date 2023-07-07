@@ -15,11 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const KataController_1 = require("../controller/KataController");
 const logger_1 = require("../utils/logger");
+const body_parser_1 = __importDefault(require("body-parser"));
+const verifyToken_middleware_1 = require("../middlewares/verifyToken.middleware");
+let jsonParser = body_parser_1.default.json();
 // Routers
 let kataRouter = express_1.default.Router();
 kataRouter
     .route("/")
-    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    .get(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     // Obtiene la id de los parámetros
     let id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
@@ -46,7 +49,7 @@ kataRouter
     // Devolver la respuesta al cliente
     return res.send(response);
 }))
-    .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    .delete(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _d;
     // Obtiene la id de los parámetros
     let id = (_d = req === null || req === void 0 ? void 0 : req.query) === null || _d === void 0 ? void 0 : _d.id;
@@ -58,56 +61,75 @@ kataRouter
     // Devolver la respuesta al cliente
     return res.send(response);
 }))
-    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e, _f, _g, _h, _j, _k, _l;
+    .post(verifyToken_middleware_1.verifyToken, jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Instancia de controlador
     const controller = new KataController_1.KataController();
-    const name = (_e = req === null || req === void 0 ? void 0 : req.query) === null || _e === void 0 ? void 0 : _e.name;
-    const description = (_f = req === null || req === void 0 ? void 0 : req.query) === null || _f === void 0 ? void 0 : _f.desc;
-    const level = (_g = req === null || req === void 0 ? void 0 : req.query) === null || _g === void 0 ? void 0 : _g.level;
-    const creator = (_h = req === null || req === void 0 ? void 0 : req.query) === null || _h === void 0 ? void 0 : _h.creator;
-    const date = (_j = req === null || req === void 0 ? void 0 : req.query) === null || _j === void 0 ? void 0 : _j.date;
-    const stars = (_k = req === null || req === void 0 ? void 0 : req.query) === null || _k === void 0 ? void 0 : _k.stars;
-    const chances = (_l = req === null || req === void 0 ? void 0 : req.query) === null || _l === void 0 ? void 0 : _l.chances;
-    // Se crea un objeto con los datos que pasa el kata
-    const newKata = {
-        name: name,
-        description: description,
-        level: level,
-        creator: creator,
-        date: date,
-        stars: stars,
-        chances: chances,
-    };
     let response = "";
-    // Obtener la respuesta
-    yield controller.createKata(newKata).then((r) => {
-        (0, logger_1.LogSuccess)(`[/api/katas] Crear kata: ${newKata.name}`);
-        response = {
-            message: `¡El kata ${newKata.name} se ha añadido con éxito a la BD!`,
+    // Se obtienen los datos del req.body
+    const { name, description, level, creator, date, stars, chances } = req.body;
+    if (name && description && level && creator && date && stars && chances) {
+        // Se crea un objeto con los datos que pasa el kata
+        const newKata = {
+            name: name,
+            description: description,
+            level: level,
+            creator: creator,
+            date: date,
+            stars: stars,
+            chances: chances,
         };
-    });
-    // Devolver la respuesta al cliente
-    return res.send(newKata);
+        (0, logger_1.LogInfo)(`{newKata}`);
+        // Obtener la respuesta
+        yield controller.createKata(newKata).then((r) => {
+            (0, logger_1.LogSuccess)(`[/api/katas] Crear kata: ${newKata.name}`);
+            response = {
+                message: `¡El kata ${newKata.name} se ha añadido con éxito a la BD!`,
+            };
+        });
+        // Devolver la respuesta al cliente y le envía el código 201 de recurso
+        // creado.
+        return res.send(newKata).status(201);
+    }
+    else {
+        response = {
+            message: "Debes introducir los campos obligatorios para poder crear un kata."
+        };
+    }
+    return response;
 }))
-    .put((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _m;
-    // Obtiene la id de los parámetros
-    let id = (_m = req === null || req === void 0 ? void 0 : req.query) === null || _m === void 0 ? void 0 : _m.id;
-    (0, logger_1.LogInfo)(`Query param: ${id}`);
-    // Instancia de controlador
-    const controller = new KataController_1.KataController();
-    // Se crea un objeto con los datos que pasa el kata
-    let kata = req.body;
-    console.log(kata);
+    .put(verifyToken_middleware_1.verifyToken, jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let response = "";
-    // Obtener la respuesta
-    yield controller.createKata(kata).then((r) => {
-        (0, logger_1.LogSuccess)(`[/api/katas] Crear kata: ${kata}`);
-        response = {
-            message: `¡El kata ${kata.name} añadido con éxito a la BD!`,
+    // Se obtienen los datos del req.body
+    const { id, name, description, level, creator, date, stars, chances } = req.body;
+    if (id && name && description && level && creator && date && stars && chances) {
+        // Se crea un objeto con los datos que pasa el kata
+        const newKata = {
+            name: name,
+            description: description,
+            level: level,
+            creator: creator,
+            date: date,
+            stars: stars,
+            chances: chances,
         };
-    });
+        // Instancia de controlador
+        const controller = new KataController_1.KataController();
+        // Se crea un objeto con los datos que pasa el kata
+        let kata = req.body;
+        console.log(kata);
+        // Obtener la respuesta
+        yield controller.updateKata(id, newKata).then((r) => {
+            (0, logger_1.LogSuccess)(`[/api/katas] Modificar kata: ${kata}`);
+            response = {
+                message: `¡El kata ${kata.name} se ha modificado con éxito!`,
+            };
+        });
+    }
+    else {
+        response = {
+            message: "Debes proporcionar el ID y los nuevos datos que quieres modificar."
+        };
+    }
     // Devolver la respuesta al cliente
     return res.send(response);
 }));

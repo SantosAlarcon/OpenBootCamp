@@ -116,7 +116,7 @@ const createNewKata = (kata) => __awaiter(void 0, void 0, void 0, function* () {
             .catch((error) => console.error(error));
     }
     catch (error) {
-        (0, logger_1.LogError)(`Error a la hora de borrar el kata. ${error}`);
+        (0, logger_1.LogError)(`Error a la hora de crear el kata. ${error}`);
     }
 });
 exports.createNewKata = createNewKata;

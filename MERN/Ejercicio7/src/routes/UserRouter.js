@@ -62,7 +62,7 @@ userRouter
     // Devolver la respuesta al cliente y el código de estado.
     return res.send(response).status(response.status);
 }))
-    .put(jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    .put(verifyToken_middleware_1.verifyToken, jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c;
     // Obtiene la id de los parámetros
     let id = (_c = req === null || req === void 0 ? void 0 : req.query) === null || _c === void 0 ? void 0 : _c.id;
