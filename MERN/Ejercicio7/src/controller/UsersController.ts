@@ -1,7 +1,7 @@
-import { Delete, Get, Query, Route, Tags, Post, Put } from "tsoa";
+import { Delete, Get, Query, Route, Tags, Put, Body } from "tsoa";
 import { IUserController } from "./interfaces";
 import { LogSuccess, LogWarning } from "../utils/logger";
-import { getAllUsers, getUserById, deleteUserById, createNewUser, updateUserById } from "../domain/orm/User.orm";
+import { getAllUsers, getUserById, deleteUserById, updateUserById } from "../domain/orm/User.orm";
 
 @Route("/api/users")
 @Tags("UsersController")
@@ -63,7 +63,7 @@ export class UsersController implements IUserController {
   * Endpoint que permite actualizar un usuario a la BD
   */
   @Put("/")
-  public async updateUser(@Query() id: string, @Query() user: any): Promise<any> {
+  public async updateUser(@Query() id: string, @Body() user: any): Promise<any> {
     let response: any = "";
 
     if (id) {

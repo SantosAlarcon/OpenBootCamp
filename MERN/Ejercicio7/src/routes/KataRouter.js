@@ -99,8 +99,9 @@ kataRouter
 }))
     .put(verifyToken_middleware_1.verifyToken, jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let response = "";
+    let id = req.query.id;
     // Se obtienen los datos del req.body
-    const { id, name, description, level, creator, date, stars, chances } = req.body;
+    const { name, description, level, creator, date, stars, chances } = req.body;
     if (id && name && description && level && creator && date && stars && chances) {
         // Se crea un objeto con los datos que pasa el kata
         const newKata = {

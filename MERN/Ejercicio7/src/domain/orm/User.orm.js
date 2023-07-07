@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logoutUser = exports.loginUser = exports.registerUser = exports.updateUserById = exports.createNewUser = exports.deleteUserById = exports.getUserById = exports.getAllUsers = void 0;
+exports.logoutUser = exports.loginUser = exports.registerNewUser = exports.updateUserById = exports.createNewUser = exports.deleteUserById = exports.getUserById = exports.getAllUsers = void 0;
 const logger_1 = require("../../utils/logger");
 const User_Entity_1 = require("../entities/User.Entity");
 const bcrypt = __importStar(require("bcrypt"));
@@ -113,7 +113,7 @@ exports.updateUserById = updateUserById;
 /**
  * Método para registrar usuario
  */
-const registerUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
+const registerNewUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let userModel = (0, User_Entity_1.userEntity)();
         return yield userModel.create(user);
@@ -122,7 +122,7 @@ const registerUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
         (0, logger_1.LogError)(`Error del ORM a la hora de crear el usuario ${user.name}. ${error}`);
     }
 });
-exports.registerUser = registerUser;
+exports.registerNewUser = registerNewUser;
 /**
  * Método para iniciar sesión
  */

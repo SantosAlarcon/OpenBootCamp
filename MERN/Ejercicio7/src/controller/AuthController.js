@@ -28,7 +28,7 @@ let AuthController = exports.AuthController = class AuthController {
             let response;
             if (user) {
                 (0, logger_1.LogSuccess)(`[/api/auth/register] Registrando nuevo usuario ${user.name}`);
-                yield (0, User_orm_1.registerUser)(user).then((r) => {
+                yield (0, User_orm_1.registerNewUser)(user).then((r) => {
                     response = {
                         message: `¡El usuario ${user.name} se ha registrado con éxito!`,
                         token: r.token
@@ -92,10 +92,12 @@ let AuthController = exports.AuthController = class AuthController {
     }
 };
 __decorate([
-    (0, tsoa_1.Post)("/register")
+    (0, tsoa_1.Post)("/register"),
+    __param(0, (0, tsoa_1.Body)())
 ], AuthController.prototype, "registerUser", null);
 __decorate([
-    (0, tsoa_1.Post)("/login")
+    (0, tsoa_1.Post)("/login"),
+    __param(0, (0, tsoa_1.Body)())
 ], AuthController.prototype, "loginUser", null);
 __decorate([
     (0, tsoa_1.Get)("/me"),

@@ -158,11 +158,12 @@ __decorate([
 ], KataController.prototype, "deleteKata", null);
 __decorate([
     (0, tsoa_1.Post)("/"),
-    __param(0, (0, tsoa_1.Query)())
+    __param(0, (0, tsoa_1.Body)())
 ], KataController.prototype, "createKata", null);
 __decorate([
     (0, tsoa_1.Put)("/"),
-    __param(0, (0, tsoa_1.Query)())
+    __param(0, (0, tsoa_1.Query)("id")),
+    __param(1, (0, tsoa_1.Body)())
 ], KataController.prototype, "updateKata", null);
 exports.KataController = KataController = __decorate([
     (0, tsoa_1.Route)("/api/katas"),

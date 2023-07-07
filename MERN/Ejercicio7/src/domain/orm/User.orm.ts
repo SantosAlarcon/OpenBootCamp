@@ -79,7 +79,7 @@ export const updateUserById = async (id: string, user: any): Promise<any> => {
 /**
  * Método para registrar usuario
  */
-export const registerUser = async (user: IUser): Promise<any> => {
+export const registerNewUser = async (user: IUser): Promise<any> => {
   try {
     let userModel = userEntity();
 

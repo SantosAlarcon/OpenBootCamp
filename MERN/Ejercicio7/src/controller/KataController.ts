@@ -1,4 +1,4 @@
-import { Delete, Get, Query, Route, Tags, Post, Put } from "tsoa";
+import { Delete, Get, Query, Route, Tags, Post, Put, Body } from "tsoa";
 import { IKataController } from "./interfaces";
 import { LogSuccess, LogWarning } from "../utils/logger";
 import { getAllKatas, getKatasByLevel, getKataById, deleteKataById, createNewKata, updateKataById, getSortByDate, getSortByTries, getSortByValoration } from "../domain/orm/Kata.orm";
@@ -100,7 +100,7 @@ export class KataController implements IKataController {
   * Endpoint que permite añadir un kata a la BD
   */
   @Post("/")
-  public async createKata(@Query() kata: IKata): Promise<any> {
+  public async createKata(@Body() kata: IKata): Promise<any> {
     let response: any = "";
     LogSuccess(`[/api/katas] Añadiendo nuevo kata ...`);
     response = await createNewKata(kata);
@@ -112,7 +112,7 @@ export class KataController implements IKataController {
   * Endpoint que permite actualizar un kata a la BD
   */
   @Put("/")
-  public async updateKata(@Query() id: string, kata: IKata): Promise<any> {
+  public async updateKata(@Query("id") id: string, @Body() kata: IKata): Promise<any> {
     let response: any = "";
 
     if (id) {

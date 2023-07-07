@@ -1,21 +1,21 @@
-import { Post, Route, Tags, Get, Query } from "tsoa";
+import { Post, Route, Tags, Get, Query, Path, Body } from "tsoa";
 import { LogSuccess, LogWarning } from "../utils/logger";
 import { IAuthController } from "./interfaces";
 import { IUser } from "./interfaces/IUser.interface";
 import { IAuth } from "./interfaces/IAuth.interface";
-import { getUserById, loginUser, registerUser } from "../domain/orm/User.orm";
+import { getUserById, loginUser, registerNewUser } from "../domain/orm/User.orm";
 import { AuthResponse } from "./types";
 
 @Route("/api/auth")
 @Tags("AuthController")
 export class AuthController implements IAuthController {
   @Post("/register")
-  public async registerUser(user: IUser): Promise<any> {
+  public async registerUser(@Body() user: IUser): Promise<any> {
     let response: AuthResponse | undefined;
 
     if (user) {
       LogSuccess(`[/api/auth/register] Registrando nuevo usuario ${user.name}`)
-      await registerUser(user).then((r: any) => {
+      await registerNewUser(user).then((r: any) => {
         response = {
           message: `¡El usuario ${user.name} se ha registrado con éxito!`,
           token: r.token
@@ -33,7 +33,7 @@ export class AuthController implements IAuthController {
   }
 
   @Post("/login")
-  public async loginUser(auth: IAuth): Promise<IAuth> {
+  public async loginUser(@Body() auth: IAuth): Promise<IAuth> {
 
     let response: AuthResponse | undefined;
 
