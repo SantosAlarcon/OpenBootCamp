@@ -59,6 +59,18 @@ export const getKatasByLevel = async (level: number): Promise<any | undefined> =
 };
 
 /**
+ * Método para obtener los katas ordenados por nivel
+ */
+export const getSortByLevel = async (): Promise<any | undefined> => {
+  try {
+    let kataModel = kataEntity();
+    return await kataModel.find({}).sort({ "level": -1 });
+  } catch (error) {
+    LogError(`Error a la hora de extraer la lista de katas ordenados por nivel. ${error}`);
+  }
+};
+
+/**
  * Método para obtener los 5 katas más recientes de mayor a menor.
  */
 export const getSortByDate = async (): Promise<any | undefined> => {

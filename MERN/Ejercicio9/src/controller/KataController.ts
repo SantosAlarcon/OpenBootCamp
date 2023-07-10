@@ -1,7 +1,7 @@
 import { Delete, Get, Query, Route, Tags, Post, Put, Body } from "tsoa";
 import { IKataController } from "./interfaces";
 import { LogError, LogSuccess, LogWarning } from "../utils/logger";
-import { getAllKatas, getKatasByLevel, getKataById, deleteKataById, createNewKata, updateKataById, getSortByDate, getSortByTries, getSortByValoration } from "../domain/orm/Kata.orm";
+import { getAllKatas, getKatasByLevel, getKataById, deleteKataById, createNewKata, updateKataById, getSortByDate, getSortByTries, getSortByValoration, getSortByLevel } from "../domain/orm/Kata.orm";
 import { IKata } from "./interfaces/IKata.interface";
 
 @Route("/api/katas")
@@ -42,11 +42,15 @@ export class KataController implements IKataController {
 
     if (sortedBy) {
       switch (sortedBy) {
+        case "level":
+          LogSuccess(`[/api/katas] Mostrando los katas ordenados por nivel.`);
+          response = await getSortByLevel();
+          break;
         case "date":
           LogSuccess(`[/api/katas] Mostrando las 5 katas más recientes.`);
           response = await getSortByDate();
           break;
-        case "valoration":
+        case "stars":
           LogSuccess(`[/api/katas] Mostrando los katas ordenados por valoración de mayor a menor.`);
           response = await getSortByValoration();
           break;

@@ -31,7 +31,7 @@ let AuthController = exports.AuthController = class AuthController {
                 yield (0, User_orm_1.registerNewUser)(user).then((r) => {
                     response = {
                         message: `¡El usuario ${user.name} se ha registrado con éxito!`,
-                        token: r.token
+                        token: r.token,
                     };
                 });
             }
@@ -39,7 +39,7 @@ let AuthController = exports.AuthController = class AuthController {
                 (0, logger_1.LogWarning)(`[/api/auth/register] Tratando de registrar usuario sin la información del mismo`);
                 response = {
                     message: "Es obligatoria la información del usuario para poder registrarlo.",
-                    token: "No válido"
+                    token: "No válido",
                 };
             }
             return response;
@@ -53,35 +53,34 @@ let AuthController = exports.AuthController = class AuthController {
                 let data = yield (0, User_orm_1.loginUser)(auth);
                 response = {
                     token: data.token,
-                    message: `Bienvenid@ a la aplicación, ${data.user.name}`
+                    message: `Bienvenid@ a la aplicación, ${data.user.name}`,
                 };
             }
             else {
                 (0, logger_1.LogWarning)(`[/api/auth/login] Se requiere introducir el email y la contraseña`);
                 response = {
                     message: "Es obligatorio proporcionar el email y la contraseña para iniciar sesión.",
-                    token: "No se ha podido autenticar el usuario."
+                    token: "No se ha podido autenticar el usuario.",
                 };
             }
             return response;
         });
     }
     /**
-    * Endpoint que devuelve la información de un usuario.
-    * Middleware: validación mediante JWT
-    * En la cabecera debes añadir una cabecera con "x-access-token"
-    * @param id El ID del usuario
-    * @returns La información del usuario con ese ID
-    */
+     * Endpoint que devuelve la información de un usuario.
+     * Middleware: validación mediante JWT
+     * En la cabecera debes añadir una cabecera con "x-access-token"
+     * @param id El ID del usuario
+     * @returns La información del usuario con ese ID
+     */
     userData(id) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";
             if (id) {
                 (0, logger_1.LogSuccess)(`[/api/auth/me] Obteniendo datos del usuario con el ID ${id}.`);
                 response = yield (0, User_orm_1.getUserById)(id);
-                // Se borra la contraseña para que se quede en el backend.
-                response.password = "";
             }
+            return response;
         });
     }
     logoutUser() {

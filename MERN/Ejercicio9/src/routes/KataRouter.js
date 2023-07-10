@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -17,6 +40,8 @@ const express_1 = __importDefault(require("express"));
 const KataController_1 = require("../controller/KataController");
 const verifyToken_middleware_1 = require("../middlewares/verifyToken.middleware");
 const logger_1 = require("../utils/logger");
+const jwt = __importStar(require("jsonwebtoken"));
+const User_Entity_1 = require("../domain/entities/User.Entity");
 let jsonParser = body_parser_1.default.json();
 // Routers
 let kataRouter = express_1.default.Router();
@@ -24,7 +49,7 @@ kataRouter
     .route("/")
     .get(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e;
-    // Obtiene la id de los parámetros
+    // Obtiene la id, nivel, pagina, limite y sortBy de los parámetros
     let id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
     let level = (_b = req === null || req === void 0 ? void 0 : req.query) === null || _b === void 0 ? void 0 : _b.level;
     let sortBy = (_c = req === null || req === void 0 ? void 0 : req.query) === null || _c === void 0 ? void 0 : _c.sortBy;
@@ -53,22 +78,52 @@ kataRouter
 }))
     .delete(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _f;
+    let token = req.headers["x-access-token"];
+    let decoded = jwt.decode(token);
+    let response;
     // Obtiene la id de los parámetros
     let id = (_f = req === null || req === void 0 ? void 0 : req.query) === null || _f === void 0 ? void 0 : _f.id;
     (0, logger_1.LogInfo)(`Query param: ${id}`);
     // Instancia de controlador
     const controller = new KataController_1.KataController();
-    // Obtener la respuesta
-    const response = yield controller.deleteKata(id);
+    const userModel = (0, User_Entity_1.userEntity)();
+    // Para obtener los datos del creador hay que consultar la base de datos por
+    // el email y guardarlo en un objeto usuario.
+    const usuario = Object.assign({}, yield userModel.find({ email: decoded.email }))[0];
+    // Se guarda el ID del creador/usuario actual en una variable
+    const idUsuarioActual = usuario["_id"].toString();
+    const creadorKata = Object.assign({}, yield controller.getKata(id));
+    console.log(creadorKata);
+    // Aquí se comprueba si el ID del usuario actual coincide con el del creador
+    // del kata a borrar.
+    if (idUsuarioActual === creadorKata) {
+        // Obtener la respuesta
+        response = yield controller.deleteKata(id);
+        response.status = 202;
+    }
+    else {
+        response = {
+            message: "Sólo el creador del kata puede borrarlo de la BD.",
+            status: 400
+        };
+    }
     // Devolver la respuesta al cliente
-    return res.send(response);
+    return res.send(response).status(response.status);
 }))
     .post(jsonParser, verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // Instancia de controlador
+    let token = req.headers["x-access-token"];
+    let decoded = jwt.decode(token);
+    // Instancia de controlador y del modelo de usuario
     const controller = new KataController_1.KataController();
+    const userModel = (0, User_Entity_1.userEntity)();
     let response = "";
     // Se obtienen los datos del req.body
-    const { name, description, level, creator, date, stars, chances, participants } = req.body;
+    const { name, description, level, date, stars, chances, participants } = req.body;
+    // Para obtener los datos del creador hay que consultar la base de datos por
+    // el email y guardarlo en un objeto usuario.
+    const usuario = Object.assign({}, yield userModel.find({ email: decoded.email }))[0];
+    // Se guarda el ID del creador/usuario actual en una variable
+    const creator = usuario["_id"].toString();
     if (name && description && level && creator && date && stars && chances && participants) {
         // Se crea un objeto con los datos que pasa el kata
         const newKata = {

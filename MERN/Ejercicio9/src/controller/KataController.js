@@ -53,11 +53,15 @@ let KataController = exports.KataController = class KataController {
             let response;
             if (sortedBy) {
                 switch (sortedBy) {
+                    case "level":
+                        (0, logger_1.LogSuccess)(`[/api/katas] Mostrando los katas ordenados por nivel.`);
+                        response = yield (0, Kata_orm_1.getSortByLevel)();
+                        break;
                     case "date":
                         (0, logger_1.LogSuccess)(`[/api/katas] Mostrando las 5 katas más recientes.`);
                         response = yield (0, Kata_orm_1.getSortByDate)();
                         break;
-                    case "valoration":
+                    case "stars":
                         (0, logger_1.LogSuccess)(`[/api/katas] Mostrando los katas ordenados por valoración de mayor a menor.`);
                         response = yield (0, Kata_orm_1.getSortByValoration)();
                         break;

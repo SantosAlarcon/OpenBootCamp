@@ -107,8 +107,8 @@ userRouter.route("/katas")
 
     if (id) {
       LogSuccess(`[/api/users/katas] Obteniendo los katas del usuario ${id}...`);
-      response = await controller.getKatasByUser(page, limit, id);
-
+      response.katas = await controller.getKatasByUser(page, limit, id);
+            response.status = 200;
     } else {
       LogWarning(`[/api/users/katas] Obteniendo katas sin el ID...`);
       response = {

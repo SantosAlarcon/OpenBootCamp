@@ -3,6 +3,8 @@ import express, { Request, Response } from "express";
 import { KataController } from "../controller/KataController";
 import { verifyToken } from "../middlewares/verifyToken.middleware";
 import { LogInfo, LogSuccess } from "../utils/logger";
+import * as jwt from "jsonwebtoken";
+import { userEntity } from "../domain/entities/User.Entity";
 
 let jsonParser = bodyParser.json();
 
@@ -10,133 +12,172 @@ let jsonParser = bodyParser.json();
 let kataRouter = express.Router();
 
 kataRouter
-  .route("/")
-  .get(verifyToken, async (req: Request, res: Response) => {
+    .route("/")
+    .get(verifyToken, async (req: Request, res: Response) => {
 
-    // Obtiene la id de los parámetros
-    let id: any = req?.query?.id;
-    let level: any = req?.query?.level;
-    let sortBy: any = req?.query?.sortBy;
-    let page: any = req?.query?.page || 1;
-    let limit: any = req?.query?.limit || 10;
+        // Obtiene la id, nivel, pagina, limite y sortBy de los parámetros
+        let id: any = req?.query?.id;
+        let level: any = req?.query?.level;
+        let sortBy: any = req?.query?.sortBy;
+        let page: any = req?.query?.page || 1;
+        let limit: any = req?.query?.limit || 10;
 
-    // Instancia de controlador
-    const controller: KataController = new KataController();
-    let response: any = "";
+        // Instancia de controlador
+        const controller: KataController = new KataController();
 
-    if (id) {
-      LogInfo(`Query param: ${id}`);
-      response = await controller.getKata(id);
-    } else if (level) {
-      LogInfo(`Query param: ${level}`);
-      response = await controller.getKatasByLevel(level);
-    } else if (sortBy) {
-      LogInfo(`Query param: ${sortBy}`);
-      response = await controller.getKataSortedBy(sortBy);
-    } else {
-      response = await controller.getAllKatas(page, limit);
-    }
+        let response: any = "";
 
-    // Devolver la respuesta al cliente
-    return res.send(response);
-  })
-  .delete(verifyToken, async (req: Request, res: Response) => {
-    // Obtiene la id de los parámetros
-    let id: any = req?.query?.id;
-    LogInfo(`Query param: ${id}`);
+        if (id) {
+            LogInfo(`Query param: ${id}`);
+            response = await controller.getKata(id);
+        } else if (level) {
+            LogInfo(`Query param: ${level}`);
+            response = await controller.getKatasByLevel(level);
+        } else if (sortBy) {
+            LogInfo(`Query param: ${sortBy}`);
+            response = await controller.getKataSortedBy(sortBy);
+        } else {
+            response = await controller.getAllKatas(page, limit);
+        }
 
-    // Instancia de controlador
-    const controller: KataController = new KataController();
+        // Devolver la respuesta al cliente
+        return res.send(response);
+    })
+    .delete(verifyToken, async (req: Request, res: Response) => {
 
-    // Obtener la respuesta
-    const response: any = await controller.deleteKata(id);
+        let token: any = req.headers["x-access-token"];
+        let decoded: any = jwt.decode(token);
+        let response: any;
 
-    // Devolver la respuesta al cliente
-    return res.send(response);
-  })
-  .post(jsonParser, verifyToken, async (req: Request, res: Response) => {
-    // Instancia de controlador
-    const controller: KataController = new KataController();
+        // Obtiene la id de los parámetros
+        let id: any = req?.query?.id;
+        LogInfo(`Query param: ${id}`);
 
-    let response: any = "";
+        // Instancia de controlador
+        const controller: KataController = new KataController();
+        const userModel = userEntity();
 
-    // Se obtienen los datos del req.body
-    const { name, description, level, creator, date, stars, chances, participants } = req.body;
+        // Para obtener los datos del creador hay que consultar la base de datos por
+        // el email y guardarlo en un objeto usuario.
+        const usuario = { ...await userModel.find({ email: decoded.email }) }[0];
 
-    if (name && description && level && creator && date && stars && chances && participants) {
-      // Se crea un objeto con los datos que pasa el kata
-      const newKata = {
-        name: name,
-        description: description,
-        level: level,
-        creator: creator,
-        date: date,
-        stars: stars,
-        chances: chances,
-        participants: participants
-      };
+        // Se guarda el ID del creador/usuario actual en una variable
+        const idUsuarioActual = usuario["_id"].toString();
+        const creadorKata = {...await controller.getKata(id)};
 
-      // Obtener la respuesta
-      await controller.createKata(newKata).then((r) => {
-        LogSuccess(`[/api/katas] Crear kata: ${newKata.name}`);
-        response = {
-          message: `¡El kata ${newKata.name} se ha añadido con éxito a la BD!`,
-        };
-      });
+        console.log(creadorKata);
 
-      // Devolver la respuesta al cliente y le envía el código 201 de recurso
-      // creado.
-      return res.send(newKata).status(201);
+        // Aquí se comprueba si el ID del usuario actual coincide con el del creador
+        // del kata a borrar.
+        if (idUsuarioActual === creadorKata) {
+            // Obtener la respuesta
+            response = await controller.deleteKata(id);
+            response.status = 202
+        } else {
+            response = {
+                message: "Sólo el creador del kata puede borrarlo de la BD.",
+                status: 400
+            }
+        }
+        
+        // Devolver la respuesta al cliente
+        return res.send(response).status(response.status);
+    })
+    .post(jsonParser, verifyToken, async (req: Request, res: Response) => {
 
-    } else {
-      response = {
-        message: "Debes introducir los campos obligatorios para poder crear un kata."
-      }
-    }
+        let token: any = req.headers["x-access-token"];
+        let decoded: any = jwt.decode(token);
 
-    return response;
+        // Instancia de controlador y del modelo de usuario
+        const controller: KataController = new KataController();
+        const userModel = userEntity();
 
-  })
-  .put(jsonParser, verifyToken, async (req: Request, res: Response) => {
-    let response: any = "";
+        let response: any = "";
 
-    let id: any = req.query.id;
+        // Se obtienen los datos del req.body
+        const { name, description, level, date, stars, chances, participants } = req.body;
 
-    // Se obtienen los datos del req.body
-    const { name, description, level, creator, date, stars, chances, participants } = req.body;
+        // Para obtener los datos del creador hay que consultar la base de datos por
+        // el email y guardarlo en un objeto usuario.
+        const usuario = { ...await userModel.find({ email: decoded.email }) }[0];
 
-    if (id && name && description && level && creator && date && stars && chances && participants) {
-      // Se crea un objeto con los datos que pasa el kata
-      const newKata = {
-        name: name,
-        description: description,
-        level: level,
-        creator: creator,
-        date: date,
-        stars: stars,
-        chances: chances,
-        participants: participants
-      };
+        // Se guarda el ID del creador/usuario actual en una variable
+        const creator = usuario["_id"].toString();
 
-      // Instancia de controlador
-      const controller: KataController = new KataController();
+        if (name && description && level && creator && date && stars && chances && participants) {
+            // Se crea un objeto con los datos que pasa el kata
+            const newKata = {
+                name: name,
+                description: description,
+                level: level,
+                creator: creator,
+                date: date,
+                stars: stars,
+                chances: chances,
+                participants: participants
+            };
 
-      // Obtener la respuesta
-      await controller.updateKata(id, newKata).then((r) => {
-        LogSuccess(`[/api/katas] Modificar kata: ${newKata}`);
-        response = {
-          message: `¡El kata ${newKata.name} se ha modificado con éxito!`,
-        };
-      });
+            // Obtener la respuesta
+            await controller.createKata(newKata).then((r) => {
+                LogSuccess(`[/api/katas] Crear kata: ${newKata.name}`);
+                response = {
+                    message: `¡El kata ${newKata.name} se ha añadido con éxito a la BD!`,
+                };
+            });
 
-    } else {
-      response = {
-        message: "Debes proporcionar el ID y los nuevos datos que quieres modificar."
-      }
-    }
+            // Devolver la respuesta al cliente y le envía el código 201 de recurso
+            // creado.
+            return res.send(newKata).status(201);
 
-    // Devolver la respuesta al cliente
-    return res.send(response);
-  });
+        } else {
+            response = {
+                message: "Debes introducir los campos obligatorios para poder crear un kata."
+            }
+        }
+
+        return response;
+
+    })
+    .put(jsonParser, verifyToken, async (req: Request, res: Response) => {
+        let response: any = "";
+
+        let id: any = req.query.id;
+
+        // Se obtienen los datos del req.body
+        const { name, description, level, creator, date, stars, chances, participants } = req.body;
+
+        if (id && name && description && level && creator && date && stars && chances && participants) {
+            // Se crea un objeto con los datos que pasa el kata
+            const newKata = {
+                name: name,
+                description: description,
+                level: level,
+                creator: creator,
+                date: date,
+                stars: stars,
+                chances: chances,
+                participants: participants
+            };
+
+            // Instancia de controlador
+            const controller: KataController = new KataController();
+
+            // Obtener la respuesta
+            await controller.updateKata(id, newKata).then((r) => {
+                LogSuccess(`[/api/katas] Modificar kata: ${newKata}`);
+                response = {
+                    message: `¡El kata ${newKata.name} se ha modificado con éxito!`,
+                };
+            });
+
+        } else {
+            response = {
+                message: "Debes proporcionar el ID y los nuevos datos que quieres modificar."
+            }
+        }
+
+        // Devolver la respuesta al cliente
+        return res.send(response);
+    });
 
 export default kataRouter;

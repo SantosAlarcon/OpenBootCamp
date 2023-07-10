@@ -97,7 +97,7 @@ authRouter.route("/me")
         // Se crea una instancia del AuthController
         const controller = new AuthController_1.AuthController();
         // Se obtiene la respuesta del controlador
-        let response = controller.userData(id);
+        let response = yield controller.userData(id);
         // En caso de que la verificación sea válida se envía la respuesta con el código 200.
         return res.status(200).send(response);
     }

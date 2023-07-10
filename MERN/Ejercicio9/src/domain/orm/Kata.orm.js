@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateKataById = exports.createNewKata = exports.deleteKataById = exports.getSortByTries = exports.getSortByValoration = exports.getSortByDate = exports.getKatasByLevel = exports.getKataById = exports.getAllKatas = void 0;
+exports.updateKataById = exports.createNewKata = exports.deleteKataById = exports.getSortByTries = exports.getSortByValoration = exports.getSortByDate = exports.getSortByLevel = exports.getKatasByLevel = exports.getKataById = exports.getAllKatas = void 0;
 const logger_1 = require("../../utils/logger");
 const Kata_Entity_1 = require("../entities/Kata.Entity");
 // CRUD de katas
@@ -66,6 +66,19 @@ const getKatasByLevel = (level) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.getKatasByLevel = getKatasByLevel;
+/**
+ * Método para obtener los katas ordenados por nivel
+ */
+const getSortByLevel = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let kataModel = (0, Kata_Entity_1.kataEntity)();
+        return yield kataModel.find({}).sort({ "level": -1 });
+    }
+    catch (error) {
+        (0, logger_1.LogError)(`Error a la hora de extraer la lista de katas ordenados por nivel. ${error}`);
+    }
+});
+exports.getSortByLevel = getSortByLevel;
 /**
  * Método para obtener los 5 katas más recientes de mayor a menor.
  */

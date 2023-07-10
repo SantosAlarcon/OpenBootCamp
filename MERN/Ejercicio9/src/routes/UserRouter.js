@@ -105,7 +105,8 @@ userRouter.route("/katas")
     const controller = new UsersController_1.UsersController();
     if (id) {
         (0, logger_1.LogSuccess)(`[/api/users/katas] Obteniendo los katas del usuario ${id}...`);
-        response = yield controller.getKatasByUser(page, limit, id);
+        response.katas = yield controller.getKatasByUser(page, limit, id);
+        response.status = 200;
     }
     else {
         (0, logger_1.LogWarning)(`[/api/users/katas] Obteniendo katas sin el ID...`);

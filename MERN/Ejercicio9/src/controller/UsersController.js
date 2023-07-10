@@ -48,9 +48,9 @@ let UsersController = exports.UsersController = class UsersController {
             let response;
             if (id) {
                 (0, logger_1.LogSuccess)(`[/api/users/katas] Obteniendo las katas del usuario con el ID ${id}...`);
-                yield (0, User_orm_1.getKatasFromUser)(page, limit, id).then(() => {
-                    (0, logger_1.LogSuccess)(`[api/users/katas] Se han encontrado las katas del usuario ${id}...`);
-                    response = {};
+                yield (0, User_orm_1.getKatasFromUser)(page, limit, id).then((katas) => {
+                    (0, logger_1.LogSuccess)(`[/api/users/katas] Se han encontrado las katas del usuario ${id}...`);
+                    response = katas;
                 });
             }
             else {
