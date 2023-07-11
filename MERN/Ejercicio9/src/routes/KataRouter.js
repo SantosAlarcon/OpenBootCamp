@@ -92,11 +92,12 @@ kataRouter
     const usuario = Object.assign({}, yield userModel.find({ email: decoded.email }))[0];
     // Se guarda el ID del creador/usuario actual en una variable
     const idUsuarioActual = usuario["_id"].toString();
-    const creadorKata = Object.assign({}, yield controller.getKata(id));
-    console.log(creadorKata);
+    // Se obtiene el ID del creador del kata
+    const creadorKata = yield controller.getKata(id);
+    const idCreadorKata = creadorKata["creator"].toString();
     // Aquí se comprueba si el ID del usuario actual coincide con el del creador
     // del kata a borrar.
-    if (idUsuarioActual === creadorKata) {
+    if (idUsuarioActual === idCreadorKata) {
         // Obtener la respuesta
         response = yield controller.deleteKata(id);
         response.status = 202;
