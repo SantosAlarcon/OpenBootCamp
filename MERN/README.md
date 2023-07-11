@@ -10,3 +10,4 @@ Este curso cuenta con un proyecto al que se va uniendo pedazos por cada ejercici
 * Para poder acceder a las rutas de las APIs, el usuario **debe estar registrado** y acto seguido **tiene que iniciar sesión**.
 * Cuando un usuario crea una "kata", se guarda el ID dentro del array de katas del usuario, y se borra de ese array cuando se borra esa kata.
 * El usuario que ha iniciado sesión sólo podrá crear, modificar y borrar sus propias katas, no las de otros usuarios.
+* Para generar la documentación de la propia API, se utiliza **Swagger**.
