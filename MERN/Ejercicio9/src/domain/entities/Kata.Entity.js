@@ -35,7 +35,8 @@ const kataEntity = () => {
         date: { type: Date, required: true },
         stars: { type: Number, required: true },
         chances: { type: Number, required: true },
-        participants: { type: [], required: true }
+        participants: { type: [], required: true },
+        solution: { type: String, required: true }
     });
     return mongoose_1.default.models.katas || (0, mongoose_1.model)("katas", kataSchema);
 };

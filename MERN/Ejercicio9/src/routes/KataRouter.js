@@ -44,19 +44,19 @@ const jwt = __importStar(require("jsonwebtoken"));
 const User_Entity_1 = require("../domain/entities/User.Entity");
 const Kata_Entity_1 = require("../domain/entities/Kata.Entity");
 const mongoose_1 = __importDefault(require("mongoose"));
-let jsonParser = body_parser_1.default.json();
+const jsonParser = body_parser_1.default.json();
 // Routers
-let kataRouter = express_1.default.Router();
+const kataRouter = express_1.default.Router();
 kataRouter
     .route("/")
     .get(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e;
     // Obtiene la id, nivel, pagina, limite y sortBy de los parámetros
-    let id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
-    let level = (_b = req === null || req === void 0 ? void 0 : req.query) === null || _b === void 0 ? void 0 : _b.level;
-    let sortBy = (_c = req === null || req === void 0 ? void 0 : req.query) === null || _c === void 0 ? void 0 : _c.sortBy;
-    let page = ((_d = req === null || req === void 0 ? void 0 : req.query) === null || _d === void 0 ? void 0 : _d.page) || 1;
-    let limit = ((_e = req === null || req === void 0 ? void 0 : req.query) === null || _e === void 0 ? void 0 : _e.limit) || 10;
+    const id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
+    const level = (_b = req === null || req === void 0 ? void 0 : req.query) === null || _b === void 0 ? void 0 : _b.level;
+    const sortBy = (_c = req === null || req === void 0 ? void 0 : req.query) === null || _c === void 0 ? void 0 : _c.sortBy;
+    const page = ((_d = req === null || req === void 0 ? void 0 : req.query) === null || _d === void 0 ? void 0 : _d.page) || 1;
+    const limit = ((_e = req === null || req === void 0 ? void 0 : req.query) === null || _e === void 0 ? void 0 : _e.limit) || 10;
     // Instancia de controlador
     const controller = new KataController_1.KataController();
     let response = "";
@@ -80,18 +80,18 @@ kataRouter
 }))
     .delete(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _f;
-    let token = req.headers["x-access-token"];
-    let decoded = jwt.decode(token);
+    const token = req.headers["x-access-token"];
+    const decoded = jwt.decode(token);
     let response;
     // Obtiene la id de los parámetros
-    let id = (_f = req === null || req === void 0 ? void 0 : req.query) === null || _f === void 0 ? void 0 : _f.id;
+    const id = (_f = req === null || req === void 0 ? void 0 : req.query) === null || _f === void 0 ? void 0 : _f.id;
     (0, logger_1.LogInfo)(`Query param: ${id}`);
     // Instancia de controlador
     const controller = new KataController_1.KataController();
     const userModel = (0, User_Entity_1.userEntity)();
     // Para obtener los datos del creador hay que consultar la base de datos por
     // el email y guardarlo en un objeto usuario.
-    const usuario = Object.assign({}, yield userModel.find({ email: decoded.email }))[0];
+    const usuario = Object.assign({}, (yield userModel.find({ email: decoded.email })))[0];
     // Se guarda el ID del creador/usuario actual en una variable
     const idUsuarioActual = usuario["_id"].toString();
     // Se obtiene el ID del creador del kata
@@ -101,19 +101,19 @@ kataRouter
     // del kata a borrar.
     if (idUsuarioActual === idCreadorKata) {
         // Se intenta borrar el kata
-        yield controller.deleteKata(id).then((exito, error) => __awaiter(void 0, void 0, void 0, function* () {
+        yield controller.deleteKata(id).then((exito) => __awaiter(void 0, void 0, void 0, function* () {
             // Si se tiene éxito en el borrado del kata, se borra la ID del kata del array de katas del creador.
             if (exito) {
                 // Se borra del array del creador del kata el ID kata borrado.
                 yield userModel.updateOne({ _id: new mongoose_1.default.Types.ObjectId(idCreadorKata) }, {
                     $pull: {
-                        katas: id
-                    }
+                        katas: id,
+                    },
                 });
                 (0, logger_1.LogSuccess)(`[/api/katas] Borrar kata: ${id}`);
                 response = {
                     message: `¡El kata con ID ${id} se ha borrado con éxito a la BD!`,
-                    status: 202
+                    status: 202,
                 };
             }
         }));
@@ -121,7 +121,7 @@ kataRouter
     else {
         response = {
             message: "Sólo el creador del kata puede borrarlo de la BD.",
-            status: 400
+            status: 400,
         };
     }
     // Devolver la respuesta al cliente
@@ -129,21 +129,28 @@ kataRouter
 }))
     .post(jsonParser, verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Se obtiene del token la información del usuario actual.
-    let token = req.headers["x-access-token"];
-    let decoded = jwt.decode(token);
+    const token = req.headers["x-access-token"];
+    const decoded = jwt.decode(token);
     // Instancia de controlador y del modelo de usuario
     const controller = new KataController_1.KataController();
     const userModel = (0, User_Entity_1.userEntity)();
     const kataModel = (0, Kata_Entity_1.kataEntity)();
     let response = "";
     // Se obtienen los datos del req.body
-    const { name, description, level, date, stars, chances, participants } = req.body;
+    const { name, description, level, date, stars, chances, participants, solution, } = req.body;
     // Para obtener los datos del creador hay que consultar la base de datos por
     // el email y guardarlo en un objeto usuario.
-    const usuario = Object.assign({}, yield userModel.find({ email: decoded.email }))[0];
+    const usuario = Object.assign({}, (yield userModel.find({ email: decoded.email })))[0];
     // Se guarda el ID del creador/usuario actual en una variable
     const creator = usuario["_id"].toString();
-    if (name && description && level && creator && date && stars && chances && participants) {
+    if (name &&
+        description &&
+        level &&
+        creator &&
+        date &&
+        stars &&
+        chances &&
+        participants) {
         // Se crea un objeto con los datos que pasa el kata
         const newKata = {
             name: name,
@@ -153,10 +160,11 @@ kataRouter
             date: date,
             stars: stars,
             chances: chances,
-            participants: participants
+            participants: participants,
+            solution: solution,
         };
         // Obtener la respuesta
-        yield controller.createKata(newKata).then((exito, error) => __awaiter(void 0, void 0, void 0, function* () {
+        yield controller.createKata(newKata).then((exito) => __awaiter(void 0, void 0, void 0, function* () {
             if (exito) {
                 // Ahora se busca el ID del nuevo kata creado
                 const createdKata = yield kataModel.find({ name: newKata.name });
@@ -164,8 +172,8 @@ kataRouter
                 // Se añade al array del creador del kata el ID kata creado.
                 yield userModel.updateOne({ _id: new mongoose_1.default.Types.ObjectId(creator) }, {
                     $push: {
-                        katas: idKata
-                    }
+                        katas: idKata,
+                    },
                 });
                 (0, logger_1.LogSuccess)(`[/api/katas] Crear kata: ${newKata.name}`);
                 response = {
@@ -179,7 +187,7 @@ kataRouter
     }
     else {
         response = {
-            message: "Debes introducir los campos obligatorios para poder crear un kata."
+            message: "Debes introducir los campos obligatorios para poder crear un kata.",
         };
     }
     return response;
@@ -187,25 +195,33 @@ kataRouter
     .put(jsonParser, verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _g;
     let response = "";
-    let token = req.headers["x-access-token"];
-    let decoded = jwt.decode(token);
+    const token = req.headers["x-access-token"];
+    const decoded = jwt.decode(token);
     // Obtiene la id de los parámetros
-    let id = (_g = req === null || req === void 0 ? void 0 : req.query) === null || _g === void 0 ? void 0 : _g.id;
+    const id = (_g = req === null || req === void 0 ? void 0 : req.query) === null || _g === void 0 ? void 0 : _g.id;
     (0, logger_1.LogInfo)(`Query param: ${id}`);
     // Se obtienen los datos del req.body
-    const { name, description, level, date, stars, chances, participants } = req.body;
+    const { name, description, level, date, stars, chances, participants, solution, } = req.body;
     // Instancia de controlador
     const controller = new KataController_1.KataController();
     const userModel = (0, User_Entity_1.userEntity)();
     // Para obtener los datos del creador hay que consultar la base de datos por
     // el email y guardarlo en un objeto usuario.
-    const usuario = Object.assign({}, yield userModel.find({ email: decoded.email }))[0];
+    const usuario = Object.assign({}, (yield userModel.find({ email: decoded.email })))[0];
     // Se guarda el ID del creador/usuario actual en una variable
     const idUsuarioActual = usuario["_id"].toString();
     // Se obtiene el ID del creador del kata
     const creadorKata = yield controller.getKata(id);
     const idCreadorKata = creadorKata["creator"].toString();
-    if (id && name && description && level && date && stars && chances && participants) {
+    if (id &&
+        name &&
+        description &&
+        level &&
+        date &&
+        stars &&
+        chances &&
+        participants &&
+        solution) {
         // Se crea un objeto con los datos que pasa el kata
         const newKata = {
             name: name,
@@ -215,7 +231,8 @@ kataRouter
             date: date,
             stars: stars,
             chances: chances,
-            participants: participants
+            participants: participants,
+            solution: solution,
         };
         // Aquí se comprueba si el ID del usuario actual coincide con el del creador
         // del kata a borrar.
@@ -225,21 +242,21 @@ kataRouter
                 (0, logger_1.LogSuccess)(`[/api/katas] Modificar kata: ${newKata}`);
                 response = {
                     message: `¡El kata ${newKata.name} se ha modificado con éxito!`,
-                    status: 204
+                    status: 204,
                 };
             });
         }
         else {
             response = {
                 message: "Sólo el creador del kata puede actualizar la información de la BD.",
-                status: 400
+                status: 400,
             };
         }
     }
     else {
         response = {
             message: "Debes proporcionar el ID y los nuevos datos que quieres modificar.",
-            status: 400
+            status: 400,
         };
     }
     // Devolver la respuesta al cliente
