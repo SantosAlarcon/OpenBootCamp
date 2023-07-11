@@ -42,6 +42,8 @@ const verifyToken_middleware_1 = require("../middlewares/verifyToken.middleware"
 const logger_1 = require("../utils/logger");
 const jwt = __importStar(require("jsonwebtoken"));
 const User_Entity_1 = require("../domain/entities/User.Entity");
+const Kata_Entity_1 = require("../domain/entities/Kata.Entity");
+const mongoose_1 = __importDefault(require("mongoose"));
 let jsonParser = body_parser_1.default.json();
 // Routers
 let kataRouter = express_1.default.Router();
@@ -98,9 +100,23 @@ kataRouter
     // Aquí se comprueba si el ID del usuario actual coincide con el del creador
     // del kata a borrar.
     if (idUsuarioActual === idCreadorKata) {
-        // Obtener la respuesta
-        response = yield controller.deleteKata(id);
-        response.status = 202;
+        // Se intenta borrar el kata
+        yield controller.deleteKata(id).then((exito, error) => __awaiter(void 0, void 0, void 0, function* () {
+            // Si se tiene éxito en el borrado del kata, se borra la ID del kata del array de katas del creador.
+            if (exito) {
+                // Se borra del array del creador del kata el ID kata borrado.
+                yield userModel.updateOne({ _id: new mongoose_1.default.Types.ObjectId(idCreadorKata) }, {
+                    $pull: {
+                        katas: id
+                    }
+                });
+                (0, logger_1.LogSuccess)(`[/api/katas] Borrar kata: ${id}`);
+                response = {
+                    message: `¡El kata con ID ${id} se ha borrado con éxito a la BD!`,
+                    status: 202
+                };
+            }
+        }));
     }
     else {
         response = {
@@ -112,11 +128,13 @@ kataRouter
     return res.send(response).status(response.status);
 }))
     .post(jsonParser, verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Se obtiene del token la información del usuario actual.
     let token = req.headers["x-access-token"];
     let decoded = jwt.decode(token);
     // Instancia de controlador y del modelo de usuario
     const controller = new KataController_1.KataController();
     const userModel = (0, User_Entity_1.userEntity)();
+    const kataModel = (0, Kata_Entity_1.kataEntity)();
     let response = "";
     // Se obtienen los datos del req.body
     const { name, description, level, date, stars, chances, participants } = req.body;
@@ -138,15 +156,26 @@ kataRouter
             participants: participants
         };
         // Obtener la respuesta
-        yield controller.createKata(newKata).then((r) => {
-            (0, logger_1.LogSuccess)(`[/api/katas] Crear kata: ${newKata.name}`);
-            response = {
-                message: `¡El kata ${newKata.name} se ha añadido con éxito a la BD!`,
-            };
-        });
+        yield controller.createKata(newKata).then((exito, error) => __awaiter(void 0, void 0, void 0, function* () {
+            if (exito) {
+                // Ahora se busca el ID del nuevo kata creado
+                const createdKata = yield kataModel.find({ name: newKata.name });
+                const idKata = createdKata[0]["_id"].toString();
+                // Se añade al array del creador del kata el ID kata creado.
+                yield userModel.updateOne({ _id: new mongoose_1.default.Types.ObjectId(creator) }, {
+                    $push: {
+                        katas: idKata
+                    }
+                });
+                (0, logger_1.LogSuccess)(`[/api/katas] Crear kata: ${newKata.name}`);
+                response = {
+                    message: `¡El kata <<${newKata.name}>> se ha añadido con éxito a la BD!`,
+                };
+            }
+        }));
         // Devolver la respuesta al cliente y le envía el código 201 de recurso
         // creado.
-        return res.send(newKata).status(201);
+        return res.send(response).status(201);
     }
     else {
         response = {

@@ -5,6 +5,8 @@ import { verifyToken } from "../middlewares/verifyToken.middleware";
 import { LogInfo, LogSuccess } from "../utils/logger";
 import * as jwt from "jsonwebtoken";
 import { userEntity } from "../domain/entities/User.Entity";
+import { kataEntity } from "../domain/entities/Kata.Entity";
+import mongoose from "mongoose";
 
 let jsonParser = bodyParser.json();
 
@@ -71,9 +73,27 @@ kataRouter
     // Aquí se comprueba si el ID del usuario actual coincide con el del creador
     // del kata a borrar.
     if (idUsuarioActual === idCreadorKata) {
-      // Obtener la respuesta
-      response = await controller.deleteKata(id);
-      response.status = 202
+
+      // Se intenta borrar el kata
+      await controller.deleteKata(id).then(async (exito, error) => {
+
+        // Si se tiene éxito en el borrado del kata, se borra la ID del kata del array de katas del creador.
+        if (exito) {
+
+          // Se borra del array del creador del kata el ID kata borrado.
+          await userModel.updateOne({ _id: new mongoose.Types.ObjectId(idCreadorKata) }, {
+            $pull: {
+              katas: id
+            }
+          })
+
+          LogSuccess(`[/api/katas] Borrar kata: ${id}`);
+          response = {
+            message: `¡El kata con ID ${id} se ha borrado con éxito a la BD!`,
+            status: 202
+          };
+        }
+      })
     } else {
       response = {
         message: "Sólo el creador del kata puede borrarlo de la BD.",
@@ -86,12 +106,14 @@ kataRouter
   })
   .post(jsonParser, verifyToken, async (req: Request, res: Response) => {
 
+    // Se obtiene del token la información del usuario actual.
     let token: any = req.headers["x-access-token"];
     let decoded: any = jwt.decode(token);
 
     // Instancia de controlador y del modelo de usuario
     const controller: KataController = new KataController();
     const userModel = userEntity();
+    const kataModel = kataEntity();
 
     let response: any = "";
 
@@ -119,16 +141,32 @@ kataRouter
       };
 
       // Obtener la respuesta
-      await controller.createKata(newKata).then((r) => {
-        LogSuccess(`[/api/katas] Crear kata: ${newKata.name}`);
-        response = {
-          message: `¡El kata ${newKata.name} se ha añadido con éxito a la BD!`,
-        };
+      await controller.createKata(newKata).then(async (exito, error) => {
+
+        if (exito) {
+
+          // Ahora se busca el ID del nuevo kata creado
+          const createdKata = await kataModel.find({ name: newKata.name });
+
+          const idKata = createdKata[0]["_id"].toString();
+
+          // Se añade al array del creador del kata el ID kata creado.
+          await userModel.updateOne({ _id: new mongoose.Types.ObjectId(creator) }, {
+            $push: {
+              katas: idKata
+            }
+          })
+
+          LogSuccess(`[/api/katas] Crear kata: ${newKata.name}`);
+          response = {
+            message: `¡El kata <<${newKata.name}>> se ha añadido con éxito a la BD!`,
+          };
+        }
       });
 
       // Devolver la respuesta al cliente y le envía el código 201 de recurso
       // creado.
-      return res.send(newKata).status(201);
+      return res.send(response).status(201);
 
     } else {
       response = {
