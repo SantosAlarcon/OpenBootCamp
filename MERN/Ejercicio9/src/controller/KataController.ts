@@ -132,18 +132,16 @@ export class KataController implements IKataController {
      * usuario.
      */
     @Post("/rate")
-    public async rateKata(@Query("id") id: string, @Body() stars: number): Promise<any> {
+    public async rateKata(@Query("id") id: string, valoration: IKataValoration): Promise<any> {
         let response: any = "";
-
-        console.log("HOLIIIIIIIIIIIIIIIIIIIII");
 
         if (id) {
             LogSuccess(`[api/katas/rate] Añadiendo nueva puntuación al kata...`);
-            await rateKataById(id, stars).then((exito: any) => {
+            await rateKataById(id, valoration).then((exito: any) => {
                 if (exito) {
                     LogSuccess(`[api/katas/rate] El kata con ID ${id} ha recibido nueva puntuación.`);
                     response = {
-                        message: `El kata con ID ${id} ha recibido una nueva valoración de ${stars} estrellas.`
+                        message: `El kata con ID ${id} ha recibido una nueva valoración de ${valoration.stars} estrellas.`
                     }
                 }
             })

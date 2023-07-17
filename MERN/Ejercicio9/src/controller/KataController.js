@@ -134,17 +134,16 @@ let KataController = exports.KataController = class KataController {
      * Endpoint que permite puntuar una kata del 1 al 5, y se guarda la valoración del
      * usuario.
      */
-    rateKata(id, stars) {
+    rateKata(id, valoration) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";
-            console.log("HOLIIIIIIIIIIIIIIIIIIIII");
             if (id) {
                 (0, logger_1.LogSuccess)(`[api/katas/rate] Añadiendo nueva puntuación al kata...`);
-                yield (0, Kata_orm_1.rateKataById)(id, stars).then((exito) => {
+                yield (0, Kata_orm_1.rateKataById)(id, valoration).then((exito) => {
                     if (exito) {
                         (0, logger_1.LogSuccess)(`[api/katas/rate] El kata con ID ${id} ha recibido nueva puntuación.`);
                         response = {
-                            message: `El kata con ID ${id} ha recibido una nueva valoración de ${stars} estrellas.`
+                            message: `El kata con ID ${id} ha recibido una nueva valoración de ${valoration.stars} estrellas.`
                         };
                     }
                 });
@@ -209,8 +208,7 @@ __decorate([
 ], KataController.prototype, "createKata", null);
 __decorate([
     (0, tsoa_1.Post)("/rate"),
-    __param(0, (0, tsoa_1.Query)("id")),
-    __param(1, (0, tsoa_1.Body)())
+    __param(0, (0, tsoa_1.Query)("id"))
 ], KataController.prototype, "rateKata", null);
 __decorate([
     (0, tsoa_1.Put)("/"),

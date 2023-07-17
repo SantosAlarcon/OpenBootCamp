@@ -288,8 +288,8 @@ kataRouter
 kataRouter.route("/rate")
     .post(jsonParser, verifyToken, async (req: Request, res: Response) => {
         let response: any = "";
-        const stars: any = req?.body?.stars
         const id: any = req?.query?.id
+        const stars: any = req?.body?.stars
  
         const token: any = req.headers["x-access-token"];
         const decoded: any = jwt.decode(token);
@@ -315,7 +315,7 @@ kataRouter.route("/rate")
 
             // Se añade la nueva valoración si el usuario no ha valorado previamente la kata.
             if (!alreadyRated) {
-                await controller.rateKata(id, stars).then((exito: any) => {
+                await controller.rateKata(id, newValoration).then((exito: any) => {
                     if (exito) {
                         response = {
                             message: `${usuario.name} ha puntuado la kata con ID ${id} con ${stars} estrellas.`,

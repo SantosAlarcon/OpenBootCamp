@@ -268,8 +268,8 @@ kataRouter.route("/rate")
     .post(jsonParser, verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _h, _j;
     let response = "";
-    const stars = (_h = req === null || req === void 0 ? void 0 : req.body) === null || _h === void 0 ? void 0 : _h.stars;
-    const id = (_j = req === null || req === void 0 ? void 0 : req.query) === null || _j === void 0 ? void 0 : _j.id;
+    const id = (_h = req === null || req === void 0 ? void 0 : req.query) === null || _h === void 0 ? void 0 : _h.id;
+    const stars = (_j = req === null || req === void 0 ? void 0 : req.body) === null || _j === void 0 ? void 0 : _j.stars;
     const token = req.headers["x-access-token"];
     const decoded = jwt.decode(token);
     // Se comprueba que el usuario ha introducido la ID de la kata y la
@@ -289,7 +289,7 @@ kataRouter.route("/rate")
         const controller = new KataController_1.KataController();
         // Se añade la nueva valoración si el usuario no ha valorado previamente la kata.
         if (!alreadyRated) {
-            yield controller.rateKata(id, stars).then((exito) => {
+            yield controller.rateKata(id, newValoration).then((exito) => {
                 if (exito) {
                     response = {
                         message: `${usuario.name} ha puntuado la kata con ID ${id} con ${stars} estrellas.`,
