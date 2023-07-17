@@ -131,6 +131,41 @@ let KataController = exports.KataController = class KataController {
         });
     }
     /**
+     * Endpoint que permite puntuar una kata del 1 al 5, y se guarda la valoración del
+     * usuario.
+     */
+    rateKata(id, stars) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let response = "";
+            if (id) {
+                if (stars > 5 || stars < 1) {
+                    (0, logger_1.LogWarning)(`[api/katas/rate] Valorando un kata con un valor fuera de rango.`);
+                    response = {
+                        message: "Debes introducir un valor entre 1 y 5 estrellas."
+                    };
+                }
+                else {
+                    (0, logger_1.LogSuccess)(`[api/katas/rate] Añadiendo nueva puntuación al kata...`);
+                    yield (0, Kata_orm_1.rateKataById)(id, stars).then((exito) => {
+                        if (exito) {
+                            (0, logger_1.LogSuccess)(`[api/katas/rate] El kata con ID ${id} ha recibido nueva puntuación.`);
+                            response = {
+                                message: `El kata con ID ${id} ha recibido una nueva valoración de ${stars} estrellas.`
+                            };
+                        }
+                    });
+                }
+            }
+            else {
+                (0, logger_1.LogWarning)(`[api/katas/rate] Valorando nuevo kata sin la ID y la valoración`);
+                response = {
+                    message: "Debes introducir la ID del kata y la puntuación de la misma."
+                };
+            }
+            return response;
+        });
+    }
+    /**
     * Endpoint que permite actualizar un kata a la BD
     */
     updateKata(id, kata) {
@@ -179,6 +214,11 @@ __decorate([
     (0, tsoa_1.Post)("/"),
     __param(0, (0, tsoa_1.Body)())
 ], KataController.prototype, "createKata", null);
+__decorate([
+    (0, tsoa_1.Post)("/rate"),
+    __param(0, (0, tsoa_1.Query)("id")),
+    __param(1, (0, tsoa_1.Body)())
+], KataController.prototype, "rateKata", null);
 __decorate([
     (0, tsoa_1.Put)("/"),
     __param(0, (0, tsoa_1.Query)("id")),

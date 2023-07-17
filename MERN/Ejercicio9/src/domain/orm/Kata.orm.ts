@@ -1,6 +1,8 @@
 import { IKata } from "../../controller/interfaces/IKata.interface";
-import { LogError, LogSuccess } from "../../utils/logger";
+import { LogError, LogInfo, LogSuccess } from "../../utils/logger";
 import { kataEntity } from "../entities/Kata.Entity";
+import { IKataValoration } from "../../controller/interfaces/IKata.interface";
+import mongoose from "mongoose";
 
 // CRUD de katas
 /**
@@ -143,3 +145,47 @@ export const updateKataById = async (id: string, kata: IKata): Promise<any> => {
     LogError(`Error a la hora de actualizar el kata. ${error}`);
   }
 };
+
+/**
+ * Método para valorar una kata pasando una ID, en el que se 
+ * guarda la ID del usuario que la puntua y la valoración.
+ */
+
+export const rateKataById = async (id: string, valoration: IKataValoration): Promise<any> => {
+  try {
+    let kataModel = kataEntity();
+    return await kataModel.findOneAndUpdate({ id, valoration });
+
+  } catch (error) {
+    LogError(`Error a la hora de valorar la kata.`)
+  }
+}
+
+/**
+ * Método que devuelve si un usuario ya ha puntuado una kata.
+ */
+
+export const kataRatedbyUser = async (kataID: string, userId: string): Promise<any> => {
+  try {
+    let kataModel = kataEntity();
+
+    const consulta = {
+      _id: new mongoose.Types.ObjectId(kataID),
+      stars: {
+        $elemMatch: {
+          id: userId
+        }
+      }
+    }
+
+    await kataModel.find(consulta).then((exito: any) => {
+      if (exito) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  } catch (error) {
+    LogError(`[Error ORM]: No se pudo encontrar el usuario dentro de las valoraciones.`);
+  }
+}

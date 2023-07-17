@@ -33,7 +33,7 @@ const kataEntity = () => {
         level: { type: String, required: true },
         creator: { type: String, required: true },
         date: { type: Date, required: true },
-        stars: { type: Number, required: true },
+        stars: { type: [], required: true },
         chances: { type: Number, required: true },
         participants: { type: [], required: true },
         solution: { type: String, required: true }

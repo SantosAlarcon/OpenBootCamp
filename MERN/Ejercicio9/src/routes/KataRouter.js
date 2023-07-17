@@ -44,6 +44,7 @@ const jwt = __importStar(require("jsonwebtoken"));
 const User_Entity_1 = require("../domain/entities/User.Entity");
 const Kata_Entity_1 = require("../domain/entities/Kata.Entity");
 const mongoose_1 = __importDefault(require("mongoose"));
+const Kata_orm_1 = require("../domain/orm/Kata.orm");
 const jsonParser = body_parser_1.default.json();
 // Routers
 const kataRouter = express_1.default.Router();
@@ -260,6 +261,53 @@ kataRouter
         };
     }
     // Devolver la respuesta al cliente
+    return res.send(response).status(response.status);
+}));
+// Ruta para puntuar katas
+kataRouter.route("/rate")
+    .post(jsonParser, verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _h, _j;
+    let response = "";
+    const stars = (_h = req === null || req === void 0 ? void 0 : req.body) === null || _h === void 0 ? void 0 : _h.stars;
+    const id = (_j = req === null || req === void 0 ? void 0 : req.query) === null || _j === void 0 ? void 0 : _j.id;
+    const token = req.headers["x-access-token"];
+    const decoded = jwt.decode(token);
+    if (id && stars) {
+        // Primero se obtiene el usuario que ha iniciado sesión y luego su ID.
+        const userModel = (0, User_Entity_1.userEntity)();
+        const kataModel = (0, Kata_Entity_1.kataEntity)();
+        const usuario = Object.assign({}, (yield userModel.find({ email: decoded.email })))[0];
+        const idUsuarioActual = usuario["_id"].toString();
+        const newValoration = {
+            id: idUsuarioActual,
+            stars: stars
+        };
+        // Primero se comprueba si el usuario ya ha valorado previamente esta kata.
+        const alreadyRated = yield (0, Kata_orm_1.kataRatedbyUser)(id, idUsuarioActual);
+        (0, logger_1.LogInfo)(`'${alreadyRated}'`);
+        // Se añade la nueva valoración si el usuario no ha valorado previamente la kata.
+        if (alreadyRated === " ") {
+            yield kataModel.updateOne({ _id: new mongoose_1.default.Types.ObjectId(id) }, {
+                $push: {
+                    stars: newValoration
+                }
+            }).then((exito) => {
+                if (exito) {
+                    response = {
+                        message: `El kata con ID ${id} ha recibido una nueva puntuación de ${stars} estrellas.`,
+                        status: 201
+                    };
+                }
+            });
+        }
+    }
+    else {
+        response = {
+            message: "Debes introducir un valor entre 1 a 5 estrellas para puntuar la Kata",
+            status: 400
+        };
+    }
+    // Devuelve la respuesta del servidor y el código de estado.
     return res.send(response).status(response.status);
 }));
 exports.default = kataRouter;

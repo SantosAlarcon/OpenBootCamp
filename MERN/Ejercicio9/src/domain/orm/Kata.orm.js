@@ -8,10 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateKataById = exports.createNewKata = exports.deleteKataById = exports.getSortByTries = exports.getSortByValoration = exports.getSortByDate = exports.getSortByLevel = exports.getKatasByLevel = exports.getKataById = exports.getAllKatas = void 0;
+exports.kataRatedbyUser = exports.rateKataById = exports.updateKataById = exports.createNewKata = exports.deleteKataById = exports.getSortByTries = exports.getSortByValoration = exports.getSortByDate = exports.getSortByLevel = exports.getKatasByLevel = exports.getKataById = exports.getAllKatas = void 0;
 const logger_1 = require("../../utils/logger");
 const Kata_Entity_1 = require("../entities/Kata.Entity");
+const mongoose_1 = __importDefault(require("mongoose"));
 // CRUD de katas
 /**
  * Método para obtener todos los katas de la colección "katas" de la BD de MongoDB.
@@ -159,3 +163,45 @@ const updateKataById = (id, kata) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.updateKataById = updateKataById;
+/**
+ * Método para valorar una kata pasando una ID, en el que se
+ * guarda la ID del usuario que la puntua y la valoración.
+ */
+const rateKataById = (id, valoration) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let kataModel = (0, Kata_Entity_1.kataEntity)();
+        return yield kataModel.findOneAndUpdate({ id, valoration });
+    }
+    catch (error) {
+        (0, logger_1.LogError)(`Error a la hora de valorar la kata.`);
+    }
+});
+exports.rateKataById = rateKataById;
+/**
+ * Método que devuelve si un usuario ya ha puntuado una kata.
+ */
+const kataRatedbyUser = (kataID, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let kataModel = (0, Kata_Entity_1.kataEntity)();
+        const consulta = {
+            _id: new mongoose_1.default.Types.ObjectId(kataID),
+            stars: {
+                $elemMatch: {
+                    id: userId
+                }
+            }
+        };
+        yield kataModel.find(consulta).then((exito) => {
+            if (exito) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        });
+    }
+    catch (error) {
+        (0, logger_1.LogError)(`[Error ORM]: No se pudo encontrar el usuario dentro de las valoraciones.`);
+    }
+});
+exports.kataRatedbyUser = kataRatedbyUser;

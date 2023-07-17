@@ -1,8 +1,8 @@
 import { Delete, Get, Query, Route, Tags, Post, Put, Body } from "tsoa";
 import { IKataController } from "./interfaces";
 import { LogError, LogSuccess, LogWarning } from "../utils/logger";
-import { getAllKatas, getKatasByLevel, getKataById, deleteKataById, createNewKata, updateKataById, getSortByDate, getSortByTries, getSortByValoration, getSortByLevel } from "../domain/orm/Kata.orm";
-import { IKata } from "./interfaces/IKata.interface";
+import { getAllKatas, getKatasByLevel, getKataById, deleteKataById, createNewKata, updateKataById, getSortByDate, getSortByTries, getSortByValoration, getSortByLevel, rateKataById } from "../domain/orm/Kata.orm";
+import { IKata, IKataValoration } from "./interfaces/IKata.interface";
 
 @Route("/api/katas")
 @Tags("KataController")
@@ -124,6 +124,42 @@ export class KataController implements IKataController {
       }
     }
 
+
+    return response;
+  }
+
+  /**
+   * Endpoint que permite puntuar una kata del 1 al 5, y se guarda la valoración del
+   * usuario.
+   */
+  @Post("/rate")
+  public async rateKata(@Query("id") id: string, @Body() stars: number): Promise<any> {
+    let response: any = "";
+
+    if (id) {
+      if (stars > 5 || stars < 1) {
+        LogWarning(`[api/katas/rate] Valorando un kata con un valor fuera de rango.`)
+        response = {
+          message: "Debes introducir un valor entre 1 y 5 estrellas."
+        }
+      } else {
+        LogSuccess(`[api/katas/rate] Añadiendo nueva puntuación al kata...`);
+        await rateKataById(id, stars).then((exito) => {
+          if (exito) {
+            LogSuccess(`[api/katas/rate] El kata con ID ${id} ha recibido nueva puntuación.`);
+            response = {
+              message: `El kata con ID ${id} ha recibido una nueva valoración de ${stars} estrellas.`
+            }
+          }
+        })
+      }
+
+    } else {
+      LogWarning(`[api/katas/rate] Valorando nuevo kata sin la ID y la valoración`);
+      response = {
+        message: "Debes introducir la ID del kata y la puntuación de la misma."
+      }
+    }
 
     return response;
   }
