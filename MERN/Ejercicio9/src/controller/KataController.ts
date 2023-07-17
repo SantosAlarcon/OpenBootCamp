@@ -110,7 +110,7 @@ export class KataController implements IKataController {
 
         if (kata) {
             LogSuccess(`[/api/katas] Añadiendo nuevo kata ...`);
-            await createNewKata(kata).then((r) => {
+            await createNewKata(kata).then((r: any) => {
                 LogSuccess(`[/api/katas]: Kata creado`);
                 response = {
                     message: `El kata ${kata.name} se ha creado con éxito.`
@@ -135,9 +135,11 @@ export class KataController implements IKataController {
     public async rateKata(@Query("id") id: string, @Body() stars: number): Promise<any> {
         let response: any = "";
 
+        console.log("HOLIIIIIIIIIIIIIIIIIIIII");
+
         if (id) {
             LogSuccess(`[api/katas/rate] Añadiendo nueva puntuación al kata...`);
-            await rateKataById(id, stars).then((exito) => {
+            await rateKataById(id, stars).then((exito: any) => {
                 if (exito) {
                     LogSuccess(`[api/katas/rate] El kata con ID ${id} ha recibido nueva puntuación.`);
                     response = {
@@ -164,7 +166,7 @@ export class KataController implements IKataController {
 
         if (id) {
             LogSuccess(`[/api/katas] Modificando los datos del kata con ID ${id} ...`);
-            await updateKataById(id, kata).then((r) => {
+            await updateKataById(id, kata).then((r: any) => {
                 response = {
                     message: `¡El kata con ID ${id} se ha actualizado con éxito!`
                 }

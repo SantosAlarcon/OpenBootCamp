@@ -137,6 +137,7 @@ let KataController = exports.KataController = class KataController {
     rateKata(id, stars) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";
+            console.log("HOLIIIIIIIIIIIIIIIIIIIII");
             if (id) {
                 (0, logger_1.LogSuccess)(`[api/katas/rate] Añadiendo nueva puntuación al kata...`);
                 yield (0, Kata_orm_1.rateKataById)(id, stars).then((exito) => {

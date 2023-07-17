@@ -286,13 +286,10 @@ kataRouter.route("/rate")
         };
         // Primero se comprueba si el usuario ya ha valorado previamente esta kata.
         const alreadyRated = yield (0, Kata_orm_1.kataRatedbyUser)(id, idUsuarioActual);
+        const controller = new KataController_1.KataController();
         // Se añade la nueva valoración si el usuario no ha valorado previamente la kata.
         if (!alreadyRated) {
-            yield kataModel.updateOne({ _id: new mongoose_1.default.Types.ObjectId(id) }, {
-                $push: {
-                    stars: newValoration
-                }
-            }).then((exito) => {
+            yield controller.rateKata(id, stars).then((exito) => {
                 if (exito) {
                     response = {
                         message: `${usuario.name} ha puntuado la kata con ID ${id} con ${stars} estrellas.`,
@@ -300,6 +297,20 @@ kataRouter.route("/rate")
                     };
                 }
             });
+            /*await kataModel.updateOne({ _id: new mongoose.Types.ObjectId(id) }, {
+                $push: {
+                    stars: newValoration
+                }
+            }).then((exito) => {
+
+                if (exito) {
+                    response = {
+                        message: `${usuario.name} ha puntuado la kata con ID ${id} con ${stars} estrellas.`,
+                        status: 201
+                    }
+                }
+
+            })*/
         }
         else {
             response = {
