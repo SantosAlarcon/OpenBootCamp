@@ -272,7 +272,9 @@ kataRouter.route("/rate")
     const id = (_j = req === null || req === void 0 ? void 0 : req.query) === null || _j === void 0 ? void 0 : _j.id;
     const token = req.headers["x-access-token"];
     const decoded = jwt.decode(token);
-    if (id && stars) {
+    // Se comprueba que el usuario ha introducido la ID de la kata y la
+    // valoración es de 1 a 5.
+    if (id && (stars > 0 && stars < 6)) {
         // Primero se obtiene el usuario que ha iniciado sesión y luego su ID.
         const userModel = (0, User_Entity_1.userEntity)();
         const kataModel = (0, Kata_Entity_1.kataEntity)();
@@ -284,9 +286,8 @@ kataRouter.route("/rate")
         };
         // Primero se comprueba si el usuario ya ha valorado previamente esta kata.
         const alreadyRated = yield (0, Kata_orm_1.kataRatedbyUser)(id, idUsuarioActual);
-        (0, logger_1.LogInfo)(`'${alreadyRated}'`);
         // Se añade la nueva valoración si el usuario no ha valorado previamente la kata.
-        if (alreadyRated === " ") {
+        if (!alreadyRated) {
             yield kataModel.updateOne({ _id: new mongoose_1.default.Types.ObjectId(id) }, {
                 $push: {
                     stars: newValoration
@@ -294,11 +295,17 @@ kataRouter.route("/rate")
             }).then((exito) => {
                 if (exito) {
                     response = {
-                        message: `El kata con ID ${id} ha recibido una nueva puntuación de ${stars} estrellas.`,
+                        message: `${usuario.name} ha puntuado la kata con ID ${id} con ${stars} estrellas.`,
                         status: 201
                     };
                 }
             });
+        }
+        else {
+            response = {
+                message: "Ya has votado a esta kata. Puntúa otra kata diferente.",
+                status: 400
+            };
         }
     }
     else {

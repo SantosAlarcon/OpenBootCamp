@@ -138,23 +138,15 @@ let KataController = exports.KataController = class KataController {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";
             if (id) {
-                if (stars > 5 || stars < 1) {
-                    (0, logger_1.LogWarning)(`[api/katas/rate] Valorando un kata con un valor fuera de rango.`);
-                    response = {
-                        message: "Debes introducir un valor entre 1 y 5 estrellas."
-                    };
-                }
-                else {
-                    (0, logger_1.LogSuccess)(`[api/katas/rate] Añadiendo nueva puntuación al kata...`);
-                    yield (0, Kata_orm_1.rateKataById)(id, stars).then((exito) => {
-                        if (exito) {
-                            (0, logger_1.LogSuccess)(`[api/katas/rate] El kata con ID ${id} ha recibido nueva puntuación.`);
-                            response = {
-                                message: `El kata con ID ${id} ha recibido una nueva valoración de ${stars} estrellas.`
-                            };
-                        }
-                    });
-                }
+                (0, logger_1.LogSuccess)(`[api/katas/rate] Añadiendo nueva puntuación al kata...`);
+                yield (0, Kata_orm_1.rateKataById)(id, stars).then((exito) => {
+                    if (exito) {
+                        (0, logger_1.LogSuccess)(`[api/katas/rate] El kata con ID ${id} ha recibido nueva puntuación.`);
+                        response = {
+                            message: `El kata con ID ${id} ha recibido una nueva valoración de ${stars} estrellas.`
+                        };
+                    }
+                });
             }
             else {
                 (0, logger_1.LogWarning)(`[api/katas/rate] Valorando nuevo kata sin la ID y la valoración`);

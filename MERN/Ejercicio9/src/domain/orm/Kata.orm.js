@@ -8,14 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.kataRatedbyUser = exports.rateKataById = exports.updateKataById = exports.createNewKata = exports.deleteKataById = exports.getSortByTries = exports.getSortByValoration = exports.getSortByDate = exports.getSortByLevel = exports.getKatasByLevel = exports.getKataById = exports.getAllKatas = void 0;
 const logger_1 = require("../../utils/logger");
 const Kata_Entity_1 = require("../entities/Kata.Entity");
-const mongoose_1 = __importDefault(require("mongoose"));
 // CRUD de katas
 /**
  * Método para obtener todos los katas de la colección "katas" de la BD de MongoDB.
@@ -183,22 +179,9 @@ exports.rateKataById = rateKataById;
 const kataRatedbyUser = (kataID, userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let kataModel = (0, Kata_Entity_1.kataEntity)();
-        const consulta = {
-            _id: new mongoose_1.default.Types.ObjectId(kataID),
-            stars: {
-                $elemMatch: {
-                    id: userId
-                }
-            }
-        };
-        yield kataModel.find(consulta).then((exito) => {
-            if (exito) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        });
+        return yield kataModel.findById(kataID)
+            .where("stars")
+            .elemMatch({ "id": userId });
     }
     catch (error) {
         (0, logger_1.LogError)(`[Error ORM]: No se pudo encontrar el usuario dentro de las valoraciones.`);
