@@ -158,6 +158,32 @@ let KataController = exports.KataController = class KataController {
         });
     }
     /**
+     * Endpoint que guarda la solución de una kata.
+     */
+    solveKata(id, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let response = "";
+            if (id) {
+                (0, logger_1.LogSuccess)(`[api/katas/solve] Añadiendo nueva puntuación al kata...`);
+                yield (0, Kata_orm_1.solveKata)(id, userId).then((exito) => {
+                    if (exito) {
+                        (0, logger_1.LogSuccess)(`[/api/katas/solve] Nueva participación en la kata con ID ${id}.`);
+                        response = {
+                            message: `El usuario con ID ${userId} ha participado en la kata ${id}.`
+                        };
+                    }
+                });
+            }
+            else {
+                (0, logger_1.LogWarning)(`[api/katas/solve] Resolviendo kata sin ID y solución`);
+                response = {
+                    message: "Debes introducir la ID del kata y la solución de la misma."
+                };
+            }
+            return response;
+        });
+    }
+    /**
     * Endpoint que permite actualizar un kata a la BD
     */
     updateKata(id, kata) {
@@ -210,6 +236,10 @@ __decorate([
     (0, tsoa_1.Post)("/rate"),
     __param(0, (0, tsoa_1.Query)("id"))
 ], KataController.prototype, "rateKata", null);
+__decorate([
+    (0, tsoa_1.Post)("/solve"),
+    __param(0, (0, tsoa_1.Query)("id"))
+], KataController.prototype, "solveKata", null);
 __decorate([
     (0, tsoa_1.Put)("/"),
     __param(0, (0, tsoa_1.Query)("id")),

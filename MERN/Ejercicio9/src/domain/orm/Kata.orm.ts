@@ -179,3 +179,19 @@ export const kataRatedbyUser = async (kataID: string, userId: string): Promise<a
         LogError(`[Error ORM]: No se pudo encontrar el usuario dentro de las valoraciones.`);
     }
 }
+
+/**
+ * Método que permite resolver una kata
+ */
+export const solveKata = async(kataID: string, userID: string): Promise<any> => {
+    try {
+        let kataModel = kataEntity();
+        return await kataModel.updateOne({_id: new mongoose.Types.ObjectId(kataID)}, {
+            $push: {
+                participants: userID
+            }
+        })
+    } catch (error) {
+        LogError(`[Error ORM]: No se pudo guardar la solución de la kata en la BD`);
+    }
+}

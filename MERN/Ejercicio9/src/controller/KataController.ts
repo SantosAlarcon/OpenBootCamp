@@ -1,7 +1,7 @@
 import { Delete, Get, Query, Route, Tags, Post, Put, Body } from "tsoa";
 import { IKataController } from "./interfaces";
 import { LogError, LogSuccess, LogWarning } from "../utils/logger";
-import { getAllKatas, getKatasByLevel, getKataById, deleteKataById, createNewKata, updateKataById, getSortByDate, getSortByTries, getSortByValoration, getSortByLevel, rateKataById } from "../domain/orm/Kata.orm";
+import { getAllKatas, getKatasByLevel, getKataById, deleteKataById, createNewKata, updateKataById, getSortByDate, getSortByTries, getSortByValoration, getSortByLevel, rateKataById, solveKata } from "../domain/orm/Kata.orm";
 import { IKata, IKataValoration } from "./interfaces/IKata.interface";
 
 @Route("/api/katas")
@@ -149,6 +149,33 @@ export class KataController implements IKataController {
             LogWarning(`[api/katas/rate] Valorando nuevo kata sin la ID y la valoración`);
             response = {
                 message: "Debes introducir la ID del kata y la puntuación de la misma."
+            }
+        }
+
+        return response;
+    }
+
+    /**
+     * Endpoint que guarda la solución de una kata.
+     */
+    @Post("/solve")
+    public async solveKata(@Query("id") id: string, userId: string): Promise<any> {
+        let response: any = "";
+
+        if (id) {
+            LogSuccess(`[api/katas/solve] Añadiendo nueva puntuación al kata...`);
+            await solveKata(id, userId).then((exito: any) => {
+                if (exito) {
+                    LogSuccess(`[/api/katas/solve] Nueva participación en la kata con ID ${id}.`);
+                    response = {
+                        message: `El usuario con ID ${userId} ha participado en la kata ${id}.`
+                    }
+                }
+            })
+        } else {
+            LogWarning(`[api/katas/solve] Resolviendo kata sin ID y solución`);
+            response = {
+                message: "Debes introducir la ID del kata y la solución de la misma."
             }
         }
 

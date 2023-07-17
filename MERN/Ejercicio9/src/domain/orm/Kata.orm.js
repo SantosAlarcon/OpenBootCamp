@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.kataRatedbyUser = exports.rateKataById = exports.updateKataById = exports.createNewKata = exports.deleteKataById = exports.getSortByTries = exports.getSortByValoration = exports.getSortByDate = exports.getSortByLevel = exports.getKatasByLevel = exports.getKataById = exports.getAllKatas = void 0;
+exports.solveKata = exports.kataRatedbyUser = exports.rateKataById = exports.updateKataById = exports.createNewKata = exports.deleteKataById = exports.getSortByTries = exports.getSortByValoration = exports.getSortByDate = exports.getSortByLevel = exports.getKatasByLevel = exports.getKataById = exports.getAllKatas = void 0;
 const logger_1 = require("../../utils/logger");
 const Kata_Entity_1 = require("../entities/Kata.Entity");
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -196,3 +196,20 @@ const kataRatedbyUser = (kataID, userId) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.kataRatedbyUser = kataRatedbyUser;
+/**
+ * Método que permite resolver una kata
+ */
+const solveKata = (kataID, userID) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let kataModel = (0, Kata_Entity_1.kataEntity)();
+        return yield kataModel.updateOne({ _id: new mongoose_1.default.Types.ObjectId(kataID) }, {
+            $push: {
+                participants: userID
+            }
+        });
+    }
+    catch (error) {
+        (0, logger_1.LogError)(`[Error ORM]: No se pudo guardar la solución de la kata en la BD`);
+    }
+});
+exports.solveKata = solveKata;

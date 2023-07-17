@@ -277,7 +277,6 @@ kataRouter.route("/rate")
     if (id && (stars > 0 && stars < 6)) {
         // Primero se obtiene el usuario que ha iniciado sesión y luego su ID.
         const userModel = (0, User_Entity_1.userEntity)();
-        const kataModel = (0, Kata_Entity_1.kataEntity)();
         const usuario = Object.assign({}, (yield userModel.find({ email: decoded.email })))[0];
         const idUsuarioActual = usuario["_id"].toString();
         const newValoration = {
@@ -326,6 +325,39 @@ kataRouter.route("/rate")
         };
     }
     // Devuelve la respuesta del servidor y el código de estado.
+    return res.send(response).status(response.status);
+}));
+kataRouter.route("/solve")
+    .post(jsonParser, verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _k, _l;
+    let response = "";
+    const id = (_k = req === null || req === void 0 ? void 0 : req.query) === null || _k === void 0 ? void 0 : _k.id;
+    const solution = (_l = req === null || req === void 0 ? void 0 : req.body) === null || _l === void 0 ? void 0 : _l.solution;
+    const token = req.headers["x-access-token"];
+    const decoded = jwt.decode(token);
+    const controller = new KataController_1.KataController();
+    if (id && solution) {
+        // Primero se obtiene el usuario que ha iniciado sesión y luego su ID.
+        const userModel = (0, User_Entity_1.userEntity)();
+        const usuario = Object.assign({}, (yield userModel.find({ email: decoded.email })))[0];
+        const idUsuarioActual = usuario["_id"].toString();
+        const kataActual = yield controller.getKata(id);
+        yield (0, Kata_orm_1.solveKata)(id, idUsuarioActual).then((exito) => {
+            if (exito) {
+                (0, logger_1.LogSuccess)(`[/api/katas/solve] Resuelto kata ID ${id}.`);
+                response = {
+                    solucion: kataActual.solution,
+                    status: 200
+                };
+            }
+        });
+    }
+    else {
+        response = {
+            message: "Debes introducir la ID de la kata y su solución",
+            status: 400
+        };
+    }
     return res.send(response).status(response.status);
 }));
 exports.default = kataRouter;
