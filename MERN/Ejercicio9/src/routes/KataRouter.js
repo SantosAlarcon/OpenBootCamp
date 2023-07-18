@@ -301,14 +301,14 @@ kataRouter.route("/rate")
                     stars: newValoration
                 }
             }).then((exito) => {
-
+    
                 if (exito) {
                     response = {
                         message: `${usuario.name} ha puntuado la kata con ID ${id} con ${stars} estrellas.`,
                         status: 201
                     }
                 }
-
+    
             })*/
         }
         else {
@@ -342,15 +342,26 @@ kataRouter.route("/solve")
         const usuario = Object.assign({}, (yield userModel.find({ email: decoded.email })))[0];
         const idUsuarioActual = usuario["_id"].toString();
         const kataActual = yield controller.getKata(id);
-        yield (0, Kata_orm_1.solveKata)(id, idUsuarioActual).then((exito) => {
-            if (exito) {
-                (0, logger_1.LogSuccess)(`[/api/katas/solve] Resuelto kata ID ${id}.`);
-                response = {
-                    solucion: kataActual.solution,
-                    status: 200
-                };
-            }
-        });
+        // Primero se comprueba si el usuario ya ha participado en esta kata.
+        const isAlreadyParticipated = yield (0, Kata_orm_1.alreadyParticipated)(id, idUsuarioActual);
+        (0, logger_1.LogInfo)(`${isAlreadyParticipated}`);
+        if (!isAlreadyParticipated) {
+            yield (0, Kata_orm_1.solveKata)(id, idUsuarioActual).then((exito) => {
+                if (exito) {
+                    (0, logger_1.LogSuccess)(`[/api/katas/solve] Resuelto kata ID ${id}.`);
+                    response = {
+                        solucion: kataActual.solution,
+                        status: 200
+                    };
+                }
+            });
+        }
+        else {
+            response = {
+                message: "Ya has participado en esta kata. Participa en otra",
+                status: 400
+            };
+        }
     }
     else {
         response = {

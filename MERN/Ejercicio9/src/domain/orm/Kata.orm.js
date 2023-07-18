@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.solveKata = exports.kataRatedbyUser = exports.rateKataById = exports.updateKataById = exports.createNewKata = exports.deleteKataById = exports.getSortByTries = exports.getSortByValoration = exports.getSortByDate = exports.getSortByLevel = exports.getKatasByLevel = exports.getKataById = exports.getAllKatas = void 0;
+exports.alreadyParticipated = exports.solveKata = exports.kataRatedbyUser = exports.rateKataById = exports.updateKataById = exports.createNewKata = exports.deleteKataById = exports.getSortByTries = exports.getSortByValoration = exports.getSortByDate = exports.getSortByLevel = exports.getKatasByLevel = exports.getKataById = exports.getAllKatas = void 0;
 const logger_1 = require("../../utils/logger");
 const Kata_Entity_1 = require("../entities/Kata.Entity");
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -213,3 +213,18 @@ const solveKata = (kataID, userID) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.solveKata = solveKata;
+/**
+ * Método que comprueba si el usuario ya ha participado en la kata.
+ */
+const alreadyParticipated = (kataID, userID) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let kataModel = (0, Kata_Entity_1.kataEntity)();
+        return yield kataModel.findById(kataID)
+            .where("participants")
+            .elemMatch({ userID });
+    }
+    catch (error) {
+        (0, logger_1.LogError)(`[Error ORM]: No se puede obtener los datos de participación`);
+    }
+});
+exports.alreadyParticipated = alreadyParticipated;
