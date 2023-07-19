@@ -1,5 +1,4 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik'
-import React, { useState } from 'react'
 import * as Yup from "yup"
 import { login } from '../../services/authService'
 import { AxiosResponse } from 'axios'
@@ -17,14 +16,6 @@ const LoginForm = () => {
     email: "",
     password: ""
   }
-
-  // Función para borrar los datos del formulario
-  /*const handleBlur = () => {
-    setCredenciales(credencialesIniciales);
-  }*/
-
-  // Se crea el estado del componente
-  // const [credenciales, setCredenciales] = useState(credencialesIniciales);
 
   return (
     <div>
