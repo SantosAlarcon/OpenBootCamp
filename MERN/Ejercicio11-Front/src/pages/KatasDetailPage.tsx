@@ -6,12 +6,12 @@ const KatasDetailPage = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
-  const haIniciadoSesion = useSessionStorage("sessionJWTToken");
+  const haIniciadoSesion: any = useSessionStorage("sessionJWTToken");
 
   useEffect(() => {
 
     // Si el usuario no ha iniciado sesión, se redirige a la página de Login.
-    if (!haIniciadoSesion) {
+    if (haIniciadoSesion === false) {
       return navigate("/login");
     }
   }, [haIniciadoSesion])

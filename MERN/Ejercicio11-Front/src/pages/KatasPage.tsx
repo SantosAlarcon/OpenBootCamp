@@ -10,7 +10,7 @@ const KatasPage = () => {
   useEffect(() => {
 
     // Si el usuario no ha iniciado sesión, se redirige a la página de Login.
-    if (!haIniciadoSesion) {
+    if (haIniciadoSesion === false) {
       return navigate("/login");
     }
   }, [haIniciadoSesion])

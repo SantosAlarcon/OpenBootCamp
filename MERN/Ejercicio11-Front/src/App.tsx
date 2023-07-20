@@ -8,36 +8,34 @@ import KatasDetailPage from './pages/KatasDetailPage'
 import useSessionStorage from './hooks/useSessionStage'
 
 function App() {
-  const haIniciadoSession: boolean = useSessionStorage("sessionJWTToken");
+  const haIniciadoSesion: any = useSessionStorage("sessionJWTToken");
 
   return (
     <>
-      <Router>
-        <nav>
-          <ul>
-            <li><Link to="/">Inicio</Link></li>
+      <nav>
+        <ul>
+          <li><Link to="/">Inicio</Link></li>
 
-            {!haIniciadoSession && (
-              <li><Link to="/login">Iniciar sesión</Link></li>
-            )}
+          {(!haIniciadoSesion && haIniciadoSesion === false) && (
+            <li><Link to="/login">Iniciar sesión</Link></li>
+          )}
 
-            {!haIniciadoSession && (
-              <li><Link to="/register">Registrarse</Link></li>
-            )}
+          {(!haIniciadoSesion && haIniciadoSesion === false) && (
+            <li><Link to="/register">Registrarse</Link></li>
+          )}
 
-            <li><Link to="/katas">Katas</Link></li>
-          </ul>
-        </nav>
+          <li><Link to="/katas">Katas</Link></li>
+        </ul>
+      </nav>
 
-        <Routes>
-          <Route path='/' element={<HomePage />}></Route>
-          <Route path='/login' element={<LoginPage />}></Route>
-          <Route path='/register' element={<RegisterPage />}></Route>
-          <Route path='/katas' element={<KatasPage />}></Route>
-          <Route path='/katas/:id' element={<KatasDetailPage />}></Route>
-          <Route path='*' element={<Navigate to="/" replace />}></Route>
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path='/' element={<HomePage />}></Route>
+        <Route path='/login' element={<LoginPage />}></Route>
+        <Route path='/register' element={<RegisterPage />}></Route>
+        <Route path='/katas' element={<KatasPage />}></Route>
+        <Route path='/katas/:id' element={<KatasDetailPage />}></Route>
+        <Route path='*' element={<Navigate to="/" replace />}></Route>
+      </Routes>
     </>
   )
 }
