@@ -4,7 +4,7 @@ const useSessionStorage = (key: string) => {
   const valorAlmacenado = sessionStorage.getItem(key);
 
   // Se devuelve el valor almacenado si ya existe en el almacén.
-  if (!valorAlmacenado) {
+  if (valorAlmacenado) {
     return valorAlmacenado;
   }
 

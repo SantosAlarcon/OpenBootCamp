@@ -1,14 +1,14 @@
 import './App.css'
-import { Routes, Router, Route, Link, Navigate } from "react-router-dom"
+import { Routes, Route, Link, Navigate } from "react-router-dom"
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
 import KatasPage from './pages/KatasPage'
 import HomePage from './pages/HomePage'
 import KatasDetailPage from './pages/KatasDetailPage'
-import useSessionStorage from './hooks/useSessionStage'
+import useSessionStorage from './hooks/useSessionStorage'
 
 function App() {
-  const haIniciadoSesion: any = useSessionStorage("sessionJWTToken");
+  const token: any = useSessionStorage("sessionJWTToken");
 
   return (
     <>
@@ -16,11 +16,11 @@ function App() {
         <ul>
           <li><Link to="/">Inicio</Link></li>
 
-          {(!haIniciadoSesion && haIniciadoSesion === false) && (
+          {(!token) && (
             <li><Link to="/login">Iniciar sesión</Link></li>
           )}
 
-          {(!haIniciadoSesion && haIniciadoSesion === false) && (
+          {(!token) && (
             <li><Link to="/register">Registrarse</Link></li>
           )}
 
