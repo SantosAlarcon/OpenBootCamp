@@ -51,10 +51,12 @@ let AuthController = exports.AuthController = class AuthController {
             if (auth) {
                 (0, logger_1.LogSuccess)(`[/api/auth/login] Iniciando sesión del usuario ${auth.email}`);
                 let data = yield (0, User_orm_1.loginUser)(auth);
-                response = {
-                    token: data.token,
-                    message: `Bienvenid@ a la aplicación, ${data.user.name}`,
-                };
+                if (data) {
+                    response = {
+                        token: data.token,
+                        message: `Bienvenid@ a la aplicación, ${data.user.name}`,
+                    };
+                }
             }
             else {
                 (0, logger_1.LogWarning)(`[/api/auth/login] Se requiere introducir el email y la contraseña`);

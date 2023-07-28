@@ -45,17 +45,17 @@ let authRouter = express_1.default.Router();
 authRouter.route("/register")
     .post(jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Se extraen los campos importantes del req.body
-    let { name, email, age, password, katas } = req === null || req === void 0 ? void 0 : req.body;
+    let { name, email, age, password } = req === null || req === void 0 ? void 0 : req.body;
     let hashedPassword = "";
     // Si están todos los campos, se procede a generar una contraseña cifrada con 8 pases.
-    if (password && name && email && age && katas) {
+    if (password && name && email && age) {
         hashedPassword = bcrypt.hashSync(req.body.password, 8);
         let newUser = {
             name,
             email,
             age,
             password: hashedPassword,
-            katas
+            katas: []
         };
         const controller = new AuthController_1.AuthController();
         const response = yield controller.registerUser(newUser);
@@ -63,7 +63,7 @@ authRouter.route("/register")
     }
     else {
         return res.status(400).send({
-            message: "Debes proporcionar todos los campos: name, password, age, email y katas."
+            message: "Debes proporcionar todos los campos: name, password, age e email."
         });
     }
 }));
