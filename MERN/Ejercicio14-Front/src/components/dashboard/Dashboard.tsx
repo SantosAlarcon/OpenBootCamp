@@ -114,15 +114,10 @@ const Dashboard = () => {
                     }}>
                         {/* Lista de objetos de menú */}
                         <List component="nav">
-                            {
-                                MenuItems
-                            }
+                            <MenuItems />
                         </List>
 
                     </Toolbar>
-
-                    <Divider />
-
                 </Drawer>
 
                 {/* Contenido del dashboard */}
