@@ -1,0 +1,19 @@
+Form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+}
+
+Label {
+  font-weight: bold;
+  text-align: left;
+}
+
+input {
+  padding: .5em 1em;
+}
+
+button {
+  width: 25%;
+  margin: 0 auto;
+}
