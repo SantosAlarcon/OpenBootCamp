@@ -1,9 +1,9 @@
-import LoginForm from '../components/forms/LoginForm'
+import LoginFormMaterial from '../components/forms/LoginFormMaterial'
 
 const LoginPage = () => {
   return (
     <div>
-      <LoginForm />
+      <LoginFormMaterial />
     </div>
   )
 }

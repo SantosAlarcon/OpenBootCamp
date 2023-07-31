@@ -1,9 +1,9 @@
-import RegisterForm from "../components/forms/RegisterForm"
+import RegisterFormMaterial from "../components/forms/RegisterFormMaterial"
 
 const RegisterPage = () => {
   return (
     <div>
-      <RegisterForm />
+      <RegisterFormMaterial />
     </div>
   )
 }
