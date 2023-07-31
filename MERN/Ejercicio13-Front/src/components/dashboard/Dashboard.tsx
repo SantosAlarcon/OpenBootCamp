@@ -2,10 +2,10 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft"
 import LogoutIcon from "@mui/icons-material/Logout"
 import MenuIcon from "@mui/icons-material/Menu"
 import NotificationsIcon from "@mui/icons-material/Notifications"
-import { Badge, Box, Container, CssBaseline, Divider, Grid, Icon, IconButton, List, Paper, ThemeProvider, Toolbar, Typography, createTheme, styled } from '@mui/material'
+import { Badge, Box, Container, CssBaseline, Divider, Grid, IconButton, List, Paper, ThemeProvider, Toolbar, Typography, createTheme, styled } from '@mui/material'
 import AppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import MuiDrawer from "@mui/material/Drawer"
-import React, { useState } from 'react'
+import { useState } from 'react'
 import MenuItems from './MenuItems'
 
 const anchuraDrawer: number = 240;
@@ -77,15 +77,12 @@ const Dashboard = () => {
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
 
-        <AppBar position="absolute" open={open}>
+        <BarraApp position="absolute" open={open}>
           <Toolbar sx={{ pr: "24px" }}>
             <IconButton edge="start" color="inherit" aria-label="Abrir drawer" onClick={toggleDrawer} sx={{
               marginRight: "36px",
-              ...(open && {
-                display: "none"
-              })
             }}>
-              <MenuIcon />
+              {open ? <ChevronLeftIcon /> : <MenuIcon />}
             </IconButton>
 
             <Typography component="h1" variant="h6" color="inherit" sx={{ flexGrow: 1 }}>
@@ -104,31 +101,27 @@ const Dashboard = () => {
               <LogoutIcon />
             </IconButton>
           </Toolbar>
-        </AppBar>
+        </BarraApp>
 
-        // Drawer
+        {/* Drawer */}
         <Drawer variant='permanent' open={open}>
           <Toolbar sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-end",
-            px: 1
+            px: [1]
           }}>
+            {/* Lista de objetos de menú */}
+            <List component="nav">
+              {
+                MenuItems
+              }
+            </List>
 
-            {/* Icono para cerrar el menú */}
-            <IconButton color="inherit" onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
           </Toolbar>
 
           <Divider />
 
-          {/* Lista de objetos de menú */}
-          <List component="nav">
-            {
-              MenuItems
-            }
-          </List>
         </Drawer>
 
         {/* Contenido del dashboard */}

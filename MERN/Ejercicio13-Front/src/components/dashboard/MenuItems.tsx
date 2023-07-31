@@ -7,28 +7,30 @@ import PeopleIcon from "@mui/icons-material/People"
 import BarChartIcon from "@mui/icons-material/BarChart"
 
 const MenuItems = () => {
-  <>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Katas" />
-    </ListItemButton>
+  return (
+    <>
+      <ListItemButton>
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        <ListItemText primary="Katas" />
+      </ListItemButton>
 
-    <ListItemButton>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Usuarios" />
-    </ListItemButton>
+      <ListItemButton>
+        <ListItemIcon>
+          <PeopleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Usuarios" />
+      </ListItemButton>
 
-    <ListItemButton>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Ranking" />
-    </ListItemButton>
-  </>
+      <ListItemButton>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Ranking" />
+      </ListItemButton>
+    </>
+  )
 }
 
 export default MenuItems;
