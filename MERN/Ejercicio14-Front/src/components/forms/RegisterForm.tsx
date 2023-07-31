@@ -38,14 +38,14 @@ const RegisterForm = () => {
         validationSchema={registerSchema}
         onSubmit={async (values) => {
           await register(values.name, values.email, values.password, values.age)
-            .then((response: AxiosResponse) => {
+            .then((response: axiosresponse) => {
               if (response.status === 200) {
-                alert(JSON.stringify(response.data.message, null, 2));
+                alert(json.stringify(response.data.message, null, 2));
               } else {
-                throw new Error("No se ha podido crear el usuario. Comprueba el nombre, email, la contraseña, la edad o que el servidor esté funcionando.")
+                throw new error("no se ha podido crear el usuario. comprueba el nombre, email, la contraseña, la edad o que el servidor esté funcionando.")
               }
-            })
-            .catch((error: any) => console.log(`[ERROR A LA HORA DE CREAR EL USUARIO]: ${error}`))
+        })
+            .catch((error: any) => console.log(`[error a la hora de crear el usuario]: ${error}`))
         }}
       >
         {
