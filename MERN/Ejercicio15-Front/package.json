@@ -1,0 +1,51 @@
+{
+  "name": "ejercicio10",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@dropzone-ui/react": "^7.0.4",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@tiptap/extension-code-block-lowlight": "^2.0.4",
+    "@tiptap/extension-document": "^2.0.4",
+    "@tiptap/extension-paragraph": "^2.0.4",
+    "@tiptap/extension-text": "^2.0.4",
+    "@tiptap/react": "^2.0.4",
+    "@tiptap/starter-kit": "^2.0.4",
+    "axios": "^1.4.0",
+    "express-fileupload": "^1.4.0",
+    "formik": "^2.4.3",
+    "highlight.js": "^11.8.0",
+    "lowlight": "^2.9.0",
+    "node-sass": "^9.0.0",
+    "prism-react-renderer": "^2.0.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.15.0",
+    "react-simple-code-editor": "^0.13.1",
+    "yup": "^1.2.0"
+  },
+  "devDependencies": {
+    "@mui/icons-material": "^5.14.3",
+    "@mui/material": "^5.14.5",
+    "@types/lowlight": "^0.0.3",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "@vitejs/plugin-react": "^4.0.4",
+    "eslint": "^8.47.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "sass": "^1.65.1",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.9"
+  }
+}
