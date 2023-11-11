@@ -19,7 +19,7 @@
     "@tiptap/extension-text": "^2.0.4",
     "@tiptap/react": "^2.0.4",
     "@tiptap/starter-kit": "^2.0.4",
-    "axios": "^1.4.0",
+    "axios": "^1.6.0",
     "express-fileupload": "^1.4.0",
     "formik": "^2.4.3",
     "highlight.js": "^11.8.0",
