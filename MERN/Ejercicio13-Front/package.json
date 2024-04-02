@@ -12,7 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "axios": "^1.4.0",
+    "axios": "^1.6.0",
     "formik": "^2.4.2",
     "node-sass": "^9.0.0",
     "prism-react-renderer": "^2.0.6",
