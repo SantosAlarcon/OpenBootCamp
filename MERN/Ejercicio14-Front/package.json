@@ -18,7 +18,7 @@
     "@tiptap/extension-text": "^2.0.4",
     "@tiptap/react": "^2.0.4",
     "@tiptap/starter-kit": "^2.0.4",
-    "axios": "^1.4.0",
+    "axios": "^1.6.0",
     "formik": "^2.4.2",
     "highlight.js": "^11.8.0",
     "lowlight": "^2.9.0",
