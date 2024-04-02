@@ -19,7 +19,7 @@
     "@tiptap/extension-text": "^2.0.4",
     "@tiptap/react": "^2.0.4",
     "@tiptap/starter-kit": "^2.0.4",
-    "axios": "^1.4.0",
+    "axios": "^1.6.0",
     "express-fileupload": "^1.4.0",
     "formik": "^2.4.3",
     "highlight.js": "^11.8.0",
@@ -46,6 +46,6 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "sass": "^1.65.1",
     "typescript": "^5.1.6",
-    "vite": "^4.4.9"
+    "vite": "^4.4.12"
   }
 }
